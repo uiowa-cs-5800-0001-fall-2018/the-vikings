@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Vikings</title>
+        <meta name="description" content="münhasır is a cloud based platform that enables users to write and keep military class encrypted diaries."/>
+        <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css'>
+        <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/summernote/0.8.3/summernote.css">
+    </head>
+    <body>
+        <main id="app"></main>
+        <template id="home">
+            
+            <div>
+            Hello World! <br>
+            <router-link :to="{ name: 'pen', params: { pen_id: 1 }}">Sample Pen 1</router-link>  
+            <router-link :to="{ name: 'pen', params: { pen_id: 2 }}">Sample Pen 2</router-link>  
+            </div>
+        </template>
+
+        <template id="pen">
+            <div>
+                <div id="blocklyDiv" ref="blocklyDiv" style="height: 480px; width: 600px;"></div>
+                <xml id="toolbox" ref="toolbox"  style="display: none">
+                    <block type="controls_if"></block>
+                    <block type="controls_repeat_ext"></block>
+                    <block type="logic_compare"></block>
+                    <block type="math_number"></block>
+                    <block type="math_arithmetic"></block>
+                    <block type="text"></block>
+                    <block type="text_print"></block>
+                </xml>
+                <textarea id="textarea">{{js_code}}</textarea>
+
+            <router-link :to="{ name: 'home'}">Return Home</router-link>  
+            </div>
+        </template>
+
+        <script src="blockly_compressed.js"></script>
+        <script src="blocks_compressed.js"></script>
+        <script src="msg/js/en.js"></script>
+        <script src="javascript_compressed.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.3.1/vue-router.min.js'></script>
+        <script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.min.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
