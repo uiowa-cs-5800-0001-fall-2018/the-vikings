@@ -1,0 +1,680 @@
+body{
+margin: 0px;
+border: 0px;
+padding: 0px;
+outline:0px;
+}
+
+.fullwid{
+    width:100%;
+}
+
+.wrapper{
+    width:100%;
+    background-color: white;
+    z-index:0;
+}
+.split{
+    height: 100vh;
+    position: fixed;
+    z-index: 0;
+    top: 50px;
+    overflow-y: auto;
+    width:50%;
+    overflow-x:auto;
+    overflow-y: auto;
+    top:60px;
+}
+.split.left{
+    right:0px;
+    background-color:black;
+}
+.split.left textarea{
+    background-color:black;
+    color: white;
+    padding-top:0px;
+    border:none;
+    width:100%;
+    height:100%;
+}
+.split.right{
+    left:0px;
+    background-color:white;/*rgb(189, 189, 189)*/
+}
+.codebg textarea{
+    background-color:black;
+    color: white;
+    padding-top:10px;
+    border:none;
+    width:100%;
+    height:100%;
+}
+
+.centered{
+    position: center;
+}
+
+.linkref{
+    padding-top:30px;
+    text-align: center;
+    font-size: 15px;
+}
+.positioningone{
+    overflow-x:auto;
+    width: 100%;
+    position: fixed;
+    top:50px;
+    height:100vh;
+}
+.blocklybg.positioningone{
+    background-color:white;/*rgb(189, 189, 189)*/
+}
+.codebg.positioningone{
+    background-color:black;
+}
+
+.text{
+    color:black;
+}
+
+.over{
+    float:right;
+}
+
+#grad {
+    height: 300px;
+    width:100%;
+    background: linear-gradient(to top, rgba(0, 204, 255, 0), rgb(0, 204, 255)); /* Standard syntax (must be last) */
+    padding-top:0px;
+    z-index:1;
+}
+#grad.user {
+    height:1350px;
+    width:100%;
+    background: linear-gradient(to top, rgba(0, 204, 255, 0), rgb(0, 204, 255)); /* Standard syntax (must be last) */
+    padding-top:0px;
+    z-index:1;
+}
+
+
+/*Side navigation for blocks*/
+
+/* Style the links inside the sidenav */
+#mySidenav button{
+    position: fixed; /* Position them relative to the browser window */
+    left: -120px; /* Position them outside of the screen */
+    transition: 0.3s; /* Add transition on hover */
+    padding: 15px; /* 15px padding */
+    width: 200px; /* Set a specific width */
+    text-decoration: none; /* Remove underline */
+    font-size: 20px; /* Increase font size */
+    text-align: left;
+    color: white; /* White text color */
+    border-radius: 0 10px 10px 0; /* Rounded corners on the top right and bottom right side */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+#mySidenav button:hover {
+    left: 0; /* On mouse-over, make the elements appear as they should */
+    border-radius: 0 0 0 0;
+    color: rgb(90, 83, 83);
+    cursor: pointer;
+    padding: 15px;
+    width: 140px;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 20px;
+    transition: 0.5s;
+    border-radius: 0 10px 10px 0; /* Rounded corners on the top right and bottom right side */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+/* The about link: 20px from the top with a green background */
+#about.aboutchoices {
+    top: 80px;
+}
+
+#blog.blogchoices {
+    top: 140px;
+}
+
+#projects.projectschoices {
+    top: 200px;
+}
+
+#contact.contactchoices {
+    top: 260px;
+}
+
+#lists.listschoices {
+    top: 320px;
+}
+
+#Colorc.Colorchoices {
+    top: 380px;
+}
+
+#Variables.Variableschoices{
+    top: 440px;
+}
+
+#Functions.Functionschoices{
+    top: 500px;
+}
+
+.unstyled-button{
+    border: none;
+    padding: 0;
+    background: none;
+}
+
+/* specific choices about */
+.aboutchoices {
+    background-color: #4CAF50;
+}
+
+.blogchoices {
+    background-color: #2196F3;
+}
+
+.projectschoices {
+    background-color: #f44336;
+}
+
+.contactchoices {
+    background-color: rgb(252, 248, 21);
+}
+
+.listschoices {
+    background-color: #75cc90;
+}
+
+.Colorchoices {
+    background-color: magenta;
+}
+
+.Variableschoices {
+    background-color: orange;
+}
+
+.Functionschoices {
+    background-color: navy;
+}
+
+.expandedbox{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 60px;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    border-radius: 0 10px 10px 0; /* Rounded corners on the top right and bottom right side */
+}
+
+.choices a {
+    padding: 8px 8px 8px 10px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+.choices a:hover {
+    color: #f1f1f1;
+}
+.choices .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+.choices.expandedbox img{
+    padding-left:10px;
+}
+    
+@media screen and (max-height: 450px) {
+  .choices {padding-top: 10px; }
+  .choices a {font-size: 18px;}
+}
+
+.vikinganimation{
+    background: linear-gradient(to bottom, rgba(66, 66, 66, 0), rgb(79, 81, 226));
+    height:680px;
+}
+
+.vikinganimationuser{
+    background: linear-gradient(to bottom, rgba(66, 66, 66, 0), rgb(79, 81, 226));
+    height:100%;
+}
+
+/*For viking animation on home page */
+/*Waves at bottom properties*/
+.wavepropertiesblue{
+    background-repeat: repeat-x;
+    position:absolute; 
+    height:200px; 
+    width:6000px; 
+    background-size: 240px 70px;
+    background-image:url(../../../Bluewave.png);
+}
+
+.wavepropertieswhite{
+    background-repeat: repeat-x;
+    position:relative; 
+    height:200px; 
+    width:6000px; 
+    background-size: 240px 70px;
+    background-image:url(../../../Whitewave.png);
+    right:160px;
+}
+.wavepropertieslightblue{
+    background-repeat: repeat-x;
+    position:relative; 
+    height:200px; 
+    width:6000px; 
+    background-size: 240px 70px;
+    background-image:url(../../../LightBluewave.png);
+    right:85px;
+}
+
+/*bottom level waves*/
+.bottomwavelightblue{
+    Top:-190px; 
+}
+.bottomwavewhite{
+    Top:-390px; 
+}
+.bottomwave{
+    Top:710px; 
+}
+
+/*middle first level waves*/
+.middlewave1lightblue{
+    Top:170px; 
+}
+.middlewave1white {
+    Top:-30px;
+}
+.middlewave1{
+    Top:670px;
+}
+
+/*middle second level waves*/
+.middlewave2lightblue{
+    Top:530px; 
+}
+.middlewave2white{
+    Top:330px;
+    
+}
+.middlewave2{
+    Top:630px;
+}
+
+/*top level waves*/
+.topwave{
+    Top:590px;
+}
+
+.transitionlightblue{
+    top:531.6px;
+}
+
+/*Viking Ship */
+.vikingship{
+    background-repeat: no-repeat;
+    position:absolute;
+    height:800px;
+    width:800px;
+    background-image:url(../../../vikingship1.png);
+    background-size: 800px 800px;
+    -webkit-animation-name: shipmove; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-delay: 2s; /* Safari 4.0 - 8.0 */
+    animation-name: shipmove;
+    animation-duration: 8s;
+    animation-delay: .5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;  
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes shipmove {
+    0%   {left: -800px; top:170px;} /* Position them outside of the screen */
+    100% {left:5px; top:170px;}
+}
+
+/* Standard syntax */
+@keyframes shipmove {
+    0%   {left: -800px; top:170px;} /* Position them outside of the screen */
+    100% {left:5px; top:170px;}
+}
+
+
+
+
+/*bluebackground on Main page*/
+.bluebackground{
+    background-color:rgb(0, 0, 238);
+    height:600px;
+
+}
+/*light blue background on Main page*/
+.lightbluebackground{
+    background-color:rgb(0, 168, 243);
+    height:300px;
+}
+
+
+
+
+
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+        display: block;
+        float: none;
+    }
+    .cancelbtn {
+        width: 100%;
+    }
+}
+
+input[type=codewritten]{
+    /*
+    background-color:blue;
+    border:none;*/
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    z-index:1;
+}
+
+
+
+/* Full-width input fields */
+input[type=text], input[type=password], input[type=passwordcheck] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+}
+
+img.avatar {
+    width: 50%;
+    border-radius: 50%;
+    border:1px solid black;
+}
+
+.container {
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: none; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 20px;
+}
+
+.modal.register{
+    overflow: auto;
+}
+
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)} 
+    to {-webkit-transform: scale(1)}
+}
+    
+@keyframes animatezoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+}
+
+/*For User Profile*/
+.centered-information{
+    background-color: rgb(221, 221, 221);
+    border-radius: 10px 10px 10px 10px; /* Rounded corners on the top right and bottom right side */
+    width: 60%;
+    min-width:900px;
+    height: auto;
+    position: absolute;
+    right: 100px;
+    top: 120px;
+    left:300px;
+    box-shadow: 8px 10px 12px rgba(0,0,0,0.4);
+}
+
+.sidenav{
+    position: fixed;
+    top:40px;
+}
+
+
+.userchanges {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.userchanges a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.userchanges a:hover {
+    color: #f1f1f1;
+}
+
+.userchanges .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#userside {
+    transition: margin-left .5s;
+    padding: 16px;
+}
+
+@media screen and (max-height: 450px) {
+  .userchanges {padding-top: 15px;}
+  .userchanges a {font-size: 18px;}
+}
+
+.infront{
+    z-index: 2;
+}
+
+
+
+
+* {box-sizing: border-box}
+.mySlides {display: none}
+
+/* Slideshow container */
+.slideshow-container {
+    max-width: 100%;
+    position: relative;
+    margin: auto;
+    top:-20%;
+    
+  }
+
+  
+  /* Next & previous buttons */
+  .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    padding: 16px;
+    margin-top: 120px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 5px 5px 0;
+  }
+  
+  /* Position the "next button" to the right */
+  .next {
+    right: 10px;
+    border-radius: 5px 0 0 5px;
+  }
+  .prev {
+      left:60%
+   }
+  
+  /* On hover, add a black background color with a little bit see-through */
+  .prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+  }
+
+  
+  /* The dots/bullets/indicators */
+  .dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+    position: relative;
+  }
+  
+  .active, .dot:hover {
+    background-color: #717171;
+  }
+  
+  /* Fading animation */
+  .fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+  }
+  
+  @-webkit-keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+  }
+  
+  @keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+  }
+  
+  /* On smaller screens, decrease text size */
+  @media only screen and (max-width: 300px) {
+    .prev, .next,.text {font-size: 11px}
+  }
