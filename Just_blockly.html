@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale = 1.0" />
+
+    <!--site properties-->
+    <title>Vikings Learn</title>
+    <link rel="stylesheet" type="text/css" href="semantic/assets/css/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="semantic/assets/css/mycss1.css">
+    <script type="text/javascript" src="semantic/assets/js/jquery.min.js"></script>
+</head>
+
+<body>
+    <!-- The Save as Modal -->
+    <div id="id01" class="modal">
+
+        <form class="modal-content animate" action="/action_page.php">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+            </div>
+
+            <div class="container">
+                <label for="filename"><b>File Name</b></label>
+                <input type="text" placeholder="Enter File Name" name="Saveasfilename" required>
+
+                <label for="aboutfile"><b>Write a Comment</b></label>
+                <input type="text" placeholder="Write Comment About Code" name="aboutcode" rows=20>
+
+                <button type="save">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- The Comment Modal -->
+    <div id="id02" class="modal">
+
+        <form class="modal-content animate" action="/action_page.php">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+            </div>
+
+            <div class="container">
+                <label for="commentonfile"><b>Write a Comment</b></label>
+                <textarea rows=30 style="width:100%"></textarea>
+
+                <button type="save">Save</button>
+            </div>
+        </form>
+    </div>
+
+
+    <!--creates main body-->
+    <div class="wrapper">
+        <!--top main bar-->
+
+        <div class="ui left top fixed menu">
+            <div class="item">
+                <img src="helmet_color_1_PUS_icon.ico">
+            </div>
+            <a href="Home_page.html" class="item linkref"><i class="home icon"></i>Home</a>
+            <a href="main_page.html" class="item linkref">Both</a>
+            <a href="Just_code.html" class="item linkref">Just Code</a>
+            <a href="#" class="item linkref"><i class="save icon"></i>Save</a>
+            <a href="#" class="item linkref" onclick="document.getElementById('id01').style.display='block'"><i class="pencil alternate icon"></i>Save As</a>
+            <a class="item linkref" onclick="document.getElementById('id02').style.display='block'"><i class="address book outline icon"></i>Comment</a>
+            <a href="main_page.html" class="item linkref"><i class="file alternate icon"></i>New Project</a>
+            <a href="#" class="item linkref"><i class="random icon"></i>Fork</a>
+            <a class="item linkref"> <i class="star outline icon"></i></a>
+
+            <div class="ui category search item">
+                <div class="ui icon input">
+                    <input class="prompt" type="text" placeholder="Search Projects...">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+
+
+            <div class="right menu top fixed">
+
+                <div class="item">
+                    <i class="user teal circle icon big"></i>
+                </div>
+            </div>
+        </div>
+        <div class="blocklybg positioningone">
+
+        </div>
+
+        <!--choices-->
+        <div id="mySidenav" class="sidenav">
+
+            <div id="choices1" class="aboutchoices choices expandedbox">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#">About</a>
+                <a href="#">Services</a>
+                <a href="#">Clients</a>
+                <a href="#">Contact</a>
+            </div>
+            <button id="about" class="unstyled-button aboutchoices" onclick="openNav()">Logic <i class="chess icon over"></i></button>
+
+            <div id="choices2" class="blogchoices choices expandedbox">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav1()">&times;</a>
+                <a href="#">About</a>
+                <a href="#">Services</a>
+                <a href="#">Clients</a>
+
+            </div>
+            <button id="blog" class="unstyled-button blogchoices" onclick="openNav1()">Loops <i class="sync alternate icon over"></i></button>
+
+            <div id="choices3" class="projectschoices choices expandedbox">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav2()">&times;</a>
+                <a href="#">About</a>
+                <a href="#">Services</a>
+
+            </div>
+            <button id="projects" class="unstyled-button projectschoices" onclick="openNav2()">Math <i class="percent icon over"></i></button>
+
+            <div id="choices4" class="contactchoices choices expandedbox">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav3()">&times;</a>
+                <a href="#">About</a>
+
+            </div>
+            <button id="contact" class="unstyled-button contactchoices" onclick="openNav3()">Text <i class="edit icon over"></i></button>
+
+            <div id="choices5" class="listschoices choices expandedbox">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav4()">&times;</a>
+                <a href="#">About</a>
+
+            </div>
+            <button id="lists" class="unstyled-button listschoices" onclick="openNav4()">Lists <i class="list ul icon over"></i></button>
+
+            <div id="choices6" class="Colorchoices choices expandedbox">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav5()">&times;</a>
+                <a href="#">About</a>
+
+            </div>
+            <button id="Colorc" class="unstyled-button Colorchoices" onclick="openNav5()">Color <i class="paint brush icon over"></i></button>
+
+            <div id="choices7" class="Variableschoices choices expandedbox">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav6()">&times;</a>
+                <a href="#">About</a>
+
+            </div>
+            <button id="Variables" class="unstyled-button Variableschoices" onclick="openNav6()">Variable <i class="superscript icon over"></i></button>
+
+            <div id="choices8" class="Functionschoices choices expandedbox">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav7()">&times;</a>
+                <a href="#">About</a>
+
+            </div>
+            <button id="Functions" class="unstyled-button Functionschoices" onclick="openNav7()">Function <i class="microchip icon over"></i></button>
+
+
+
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="semantic/assets/js/semantic.min.js"></script>
+<script type="text/javascript" src="semantic/assets/js/myjs.js"></script>
+
+
+</html>

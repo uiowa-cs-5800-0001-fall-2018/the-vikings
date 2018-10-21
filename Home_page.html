@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale = 1.0" />
+
+    <!--site properties-->
+    <title>Vikings Learn</title>
+    <link rel="stylesheet" type="text/css" href="semantic/assets/css/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="semantic/assets/css/mycss1.css">
+    <script type="text/javascript" src="semantic/assets/js/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <!-- The Sign in Modal -->
+    <div id="id01" class="modal">
+
+        <form class="modal-content animate" action="/action_page.php">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="Helmet Cutout.png" alt="Avatar" class="avatar">
+            </div>
+
+            <div class="container">
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="uname" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+
+                <button type="submit">Login</button>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+                <span class="psw"><a href="#" onclick="document.getElementById('forgottenID').style.display='block'">Forgot
+                        password?</a></span>
+            </div>
+        </form>
+    </div>
+
+    <!--Forgot Password Modal-->
+    <div id="forgottenID" class="modal">
+
+        <form class="modal-content animate" action="/action_page.php">
+            <div class="container">
+                <label for="Sendpass"><b>Enter email and we will send the password</b></label>
+                <input type="text" placeholder="Leif-erikson@vikings.com">
+
+                <button type="submit">Send</button>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('forgottenID').style.display='none'" class="cancelbtn">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <!--The Register Modal-->
+    <div id="id02" class="modal register">
+
+        <form class="modal-content animate" action="/action_page.php">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="Helmet Cutout.png" alt="Avatar" class="avatar">
+            </div>
+
+            <div class="container">
+                <label for="fname"><b>First Name</b></label>
+                <input type="text" placeholder="Leif" name="fname" required>
+
+                <label for="lname"><b>Last Name</b></label>
+                <input type="text" placeholder="Erikson" name="lname" required>
+
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="uname" required>
+
+                <label for="email"><b>Email Address</b></label>
+                <input type="text" placeholder="Leif-erikson@vikings.com" name="email" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="passwordcheck" id="passwordchoice" placeholder="Password must be >= 6 characters" name="psw"
+                    onkeyup="correctpass();" required>
+
+                <label for="psw"><b>Repeat Password</b></label>
+                <input type="passwordcheck" id="passwordchecking" placeholder="Repeat Password" name="psw" onkeyup="correctpass();"
+                    required>
+                <span id="incorrect_message"></span>
+
+                <button type="submit">Login</button>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+
+    <!--main stuff here-->
+    <div id="grad">
+        <div class="ui container">
+            <div class="ui secondary top large menu">
+                <div class="left item">
+                    <a class="toc item">
+
+                    </a>
+                </div>
+                <div class="right item">
+                    <div class="ui category search item">
+                        <div class="ui icon input">
+                            <input class="prompt" type="text" placeholder="Search Projects...">
+                            <i class="search link icon"></i>
+                        </div>
+                        <div class="results"></div>
+                    </div>
+                    <a class="item" href="main_page.html">
+                        Tutorial
+                    </a>
+                    <a class="item" onclick="document.getElementById('id01').style.display='block'">
+                        Sign in
+                    </a>
+                    <a class="item" onclick="document.getElementById('id02').style.display='block'">
+                        Register
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="vikinganimation">
+            <h5 style="position:absolute; Top:200px; right:500px;left:800px;white-space: nowrap;">In a sea of code it
+                is easy to get swept away...</h5>
+            <h5 style="position:absolute; Top:210px; right:400px; left:850px;white-space: nowrap;">Don't get swept
+                away. Learn code with the Vikings!</h5>
+            <div class="topwave wavepropertiesblue"></div>
+            <div class="middlewave2lightblue wavepropertieslightblue"></div>
+            <div class="middlewave2white wavepropertieswhite"></div>
+            <div class="middlewave2 wavepropertiesblue"></div>
+            <div class="middlewave1lightblue wavepropertieslightblue"></div>
+            <div class="vikingship"></div>
+            <div class="middlewave1white wavepropertieswhite"></div>
+            <div class="middlewave1 wavepropertiesblue"></div>
+            <div class="bottomwavelightblue wavepropertieslightblue"></div>
+            <div class="bottomwavewhite wavepropertieswhite"></div>
+            <div class="bottomwave wavepropertiesblue"></div>
+
+        </div>
+
+        <div class="bluebackground">
+            <div class="transitionlightblue wavepropertieslightblue"></div>
+
+            <!--Slideshow container-->
+            <div class="slideshow-container">
+
+                <div class="mySlides fade">
+                    <img src="semantic/assets/img/Kids-Codking.jpg" style="width:608px;height:370px;left:350px;padding-right:10px"
+                        align="right">
+                    <h1 style="left:-340px;color:yellow;padding-left:10px"><u>Our Mission</u></h1>
+                    <br>
+                    <p style="left:-340px;color:yellow;padding-left:10px;">
+                        Provide a safe and easy learning environment for kids, teens, or even students to learn coding.
+                    </p>
+
+
+                </div>
+
+                <div class="mySlides fade">
+                    <img src="img_snow_wide.jpg" style="width:100%">
+                </div>
+
+                <div class="mySlides fade">
+                    <img src="img_mountains_wide.jpg" style="width:100%">
+                </div>
+
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            </div>
+
+
+        </div>
+        <div class="lightbluebackground">
+
+        </div>
+
+    </div>
+
+</body>
+
+<script type="text/javascript" src="semantic/assets/js/semantic.min.js"></script>
+<script type="text/javascript" src="semantic/assets/js/myjs.js"></script>
+
+</html>
