@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from project.config import Config
+from config import Config
 
 db = SQLAlchemy()
 app = Flask(__name__, static_url_path='')
