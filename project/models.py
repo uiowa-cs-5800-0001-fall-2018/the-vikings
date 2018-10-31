@@ -1,5 +1,5 @@
 import datetime
-from project.database_controller.app import bcrypt, db, app
+from __init__ import bcrypt, db
 
 
 class BaseModel(db.Model):
@@ -55,33 +55,3 @@ class User(BaseModel, db.Model):
         ).decode()
         self.registered_on = datetime.datetime.now()
         self.admin = admin
-
-
-class Project(BaseModel, db.Model):
-    """ Project Model for storing project related details """
-    __tablename__ = "projects"
-    # __table_args__ = {'extend_existing': True}
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    owner = db.Column(db.String(), nullable=False)
-    xml = db.Column(db.String())
-    name = db.Column(db.String(256), nullable=False)
-    description =db.Column(db.String())
-    is_public = db.Column(db.Boolean, default=False)
-    last_modified = db.Column(db.DateTime, nullable=False)
-    num_stars = db.Column(db.Integer, default=False)
-
-    def __init__(self,
-                 id,
-                 owner,
-                 name,
-                 is_public,
-                 description="",
-                 ):
-        self.id = id
-        self.owner = owner
-        self.description = description
-        self.is_public = is_public
-        self.name = name
-        self.last_modified = datetime.datetime.now()
-        self.num_stars = 0
