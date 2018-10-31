@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from project.config import Config
 
+
 db = SQLAlchemy()
 app = Flask(__name__, static_url_path='')
 app.config.from_object(Config)
