@@ -1,5 +1,6 @@
 import datetime
-from project.database_controller.app import bcrypt, db, app
+import jwt
+from project import bcrypt, db, app
 
 
 class BaseModel(db.Model):
@@ -27,20 +28,10 @@ class BaseModel(db.Model):
         }
 
 
-# class Kamyon(BaseModel, db.Model):
-#     """Model for the users table"""
-
-#     __tablename__ = 'kamyon'
-
-#     id = db.Column(db.Integer, primary_key = True)
-#     name = db.Column(db.String)
-#     project = db.Column(db.String)
-
-
 class User(BaseModel, db.Model):
     """ User Model for storing user related details """
     __tablename__ = "users"
-    # __table_args__ = {'extend_existing': True} 
+    __table_args__ = {'extend_existing': True} 
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
@@ -56,32 +47,68 @@ class User(BaseModel, db.Model):
         self.registered_on = datetime.datetime.now()
         self.admin = admin
 
+    def encode_auth_token(self, user_id):
+        """
+        Generates the Auth Token
+        :return: string
+        """
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                app.config.get('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
 
-class Project(BaseModel, db.Model):
-    """ Project Model for storing project related details """
-    __tablename__ = "projects"
-    # __table_args__ = {'extend_existing': True}
+    @staticmethod
+    def decode_auth_token(auth_token):
+        """
+        Validates the auth token
+        :param auth_token:
+        :return: integer|string
+        """
+        try:
+            payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
+            is_blacklisted_token = BlacklistToken.check_blacklist(auth_token)
+            if is_blacklisted_token:
+                return 'Token blacklisted. Please log in again.'
+            else:
+                return payload['sub']
+        except jwt.ExpiredSignatureError:
+            return 'Signature expired. Please log in again.'
+        except jwt.InvalidTokenError:
+            return 'Invalid token. Please log in again.'
+
+class BlacklistToken(BaseModel, db.Model):
+    """
+    Token Model for storing JWT tokens
+    """
+    __tablename__ = 'blacklist_tokens'
+    __table_args__ = {'extend_existing': True} 
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    owner = db.Column(db.String(), nullable=False)
-    xml = db.Column(db.String())
-    name = db.Column(db.String(256), nullable=False)
-    description =db.Column(db.String())
-    is_public = db.Column(db.Boolean, default=False)
-    last_modified = db.Column(db.DateTime, nullable=False)
-    num_stars = db.Column(db.Integer, default=False)
+    token = db.Column(db.String(500), unique=True, nullable=False)
+    blacklisted_on = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self,
-                 id,
-                 owner,
-                 name,
-                 is_public,
-                 description="",
-                 ):
-        self.id = id
-        self.owner = owner
-        self.description = description
-        self.is_public = is_public
-        self.name = name
-        self.last_modified = datetime.datetime.now()
-        self.num_stars = 0
+    def __init__(self, token):
+        self.token = token
+        self.blacklisted_on = datetime.datetime.now()
+
+    def __repr__(self):
+        return '<id: token: {}'.format(self.token)
+
+    @staticmethod
+    def check_blacklist(auth_token):
+        # check whether auth token has been blacklisted
+        res = BlacklistToken.query.filter_by(token=str(auth_token)).first()
+        if res:
+            return True  
+        else:
+            return False
+
