@@ -119,6 +119,9 @@ var Profile = Vue.extend({
             username: this.$route.params.username,
             token: "",
             requester: null,
+            project: {},
+            msg: null,
+            status: null,
         }
     },
     mounted: function() {
@@ -130,35 +133,76 @@ var Profile = Vue.extend({
                 }
             }).then(response => {
                 this.requester = response.body.data;
-                console.log(response.body.data)
             })
         }
         
+    },
+    methods: {
+        createProject: function() {
+            if (this.project.is_public) {
+                is_public = 1
+            } else {
+                is_public = 0
+            }
+            json = {"name": this.project.name, "description": this.project.desc, "is_public": is_public}
+            
+            this.$http.post('/create_project', json, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.token
+                }
+            }).then(response => {
+                body = response.body
+                this.status = body.status
+                if (body.status == "success") {
+                    this.msg = "Created, redirecting..."
+                    
+                    setTimeout(function() {
+                        router.push({ name: 'project', params: { project_id: body.pid }})
+                    }, 3000);
+                } else {
+                    this.msg = "Something unexpected happened, please try again later."
+                }
+
+            });
+        }
     }
 })
 
-var Pen = Vue.extend({
-    template: '#pen',
+var Project = Vue.extend({
+    template: '#project',
     data: function() {
         return {
-            pen_id: this.$route.params.pen_id,
+            project_id: this.$route.params.project_id,
             content: '',
             js_code: '',
-            workspace: null
+            workspace: null,
+            requester: {"username": null},
         }
     },
     mounted: function() {
         var workspace = Blockly.inject(this.$refs.blocklyDiv, {toolbox: this.$refs.toolbox});
         this.workspace = workspace
         workspace.addChangeListener(this.onWorkspaceChange);
-        
+
+
+        this.token = getCookie("token_vikings")
+        if (this.token) {
+            this.$http.get('/auth/status', {
+                headers: {
+                    'Authorization': this.token
+                }
+            }).then(response => {
+                this.requester = response.body.data;
+            })
+        }
     },
     created: function() {
         this.run();
     },
     methods: {
         run: function() {
-            this.$http.get('/pens/'+this.pen_id, {
+            this.$http.get('/projects/'+this.project_id, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -166,7 +210,7 @@ var Pen = Vue.extend({
                 res = response.body;
                 
                 if (res.status == 'success') {
-                    this.content = res.content
+                    this.content = res.xml
                     var xml = Blockly.Xml.textToDom(this.content);
                     Blockly.Xml.domToWorkspace(xml, this.workspace);
                     var code = Blockly.JavaScript.workspaceToCode(this.workspace);
@@ -184,6 +228,9 @@ var Pen = Vue.extend({
             // var xml = Blockly.Xml.workspaceToDom(workspace);
             // var xml_text = Blockly.Xml.domToText(xml);
             // console.log(xml_text)
+        },
+        save: function(){
+            // save the code!!!
         }
     }
 })
@@ -196,9 +243,9 @@ const router = new VueRouter({
             name: 'home'
         },
         {
-            path: '/pen/:pen_id',
-            component: Pen,
-            name: 'pen'
+            path: '/project/:project_id',
+            component: Project,
+            name: 'project'
         },
         {
             path: '/user/:username',
