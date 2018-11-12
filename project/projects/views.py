@@ -50,9 +50,23 @@ def create_project(user):
 	)
 
 	db.session.add(project)
-	db.session.commit()
+	db.session.commit() 
 	
 	return jsonify({"status": "success", "pid": project.id})
+
+@app.route('/save_project', methods=['POST'])
+@authorize
+def save_project(user):
+	post_data = request.get_json()
+	p_id = post_data.get('p_id')
+	content = post_data.get('content')
+
+	res = save_project_helper(p_id, content, user)
+
+	if res:
+		return jsonify({"status":"success"})
+
+	return jsonify({"status": "fail"})
 
 @app.route("/projects/<project_id>")
 def project_data(project_id):
@@ -60,6 +74,9 @@ def project_data(project_id):
 
 	return content
 
+@app.route("/user/<owner>")
+def projects_data(owner):
+	return get_projects(owner)
 
 def get_project(project_id: int) -> json:
 	"""
@@ -79,3 +96,37 @@ def get_project(project_id: int) -> json:
 
 
 	return "foo"
+
+
+def get_projects(owner):
+	query_result = db.session.query(Project).filter(Project.owner == owner).all()
+
+	respond = []
+	for res in query_result:
+		info = {
+			"id": res.id,
+			"name" : res.name,
+			"description" : res.description,
+			"xml": res.xml,
+			"owner": res.owner,
+			"datetime": str(res.last_modified),
+			"num_stars": res.num_stars
+		}
+		respond.append(info)
+
+	
+	respond.reverse()
+	respond = {"status":"success", "data": respond}
+
+	return json.dumps(respond)
+
+
+def save_project_helper(p_id, content, submitter):
+	query_result = db.session.query(Project).filter(Project.id == p_id).first()
+	if query_result.owner == submitter['username']:
+		query_result.xml = content
+		db.session.commit() 
+	
+		return True
+
+	return False
