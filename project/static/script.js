@@ -1,7 +1,141 @@
+///////// AUX FUNCTIONS //////////
+
+function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+function eraseCookie(name) {   
+    document.cookie = name+'=; Max-Age=-99999999;';  
+}
+
+///////// END AUX FUNCTIONS //////////
+
 var Home = Vue.extend({
-    template: '#home'
+    template: '#home',
+    data: function() {
+        return {
+            login: { 
+                "username":"", 
+                "password": ""
+            },
+            register: {
+                "email":"", 
+                "password": "",
+                "username": ""
+            },
+            msg: "",
+            status : "",
+
+        }
+    },
+    methods: {
+        logInUser: function() {
+            var login = this.login;
+            console.log(login);
+            var json = {
+                "username": login.username,
+                "password": login.password
+            }
+            // var res = "";
+            console.log(json);
+            this.$http.post('/auth/login', json, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                body = response.body
+                this.status = body.status
+                if (body.status == "success") {
+                    this.msg = "Successfully logged in, directing to your homepage."
+                    setCookie('token_vikings', 'Bearer '+body.auth_token, 365);
+                    setTimeout(function() {
+                        router.push({ name: 'profile', params: { username: json.username }})
+                    }, 3000);
+                } else if (body.status == "fail") {
+                    this.msg = "Given info doesn't match with our records."
+                } else {
+                    this.msg = "Something unexpected happened, please try again later."
+                }
+
+            });
+        },
+        registerUser: function() {
+            var register = this.register;
+            var json = {
+                "username": register.username,
+                "email": register.email,
+                "password": register.password,
+                "password2": register.password2
+            }
+            if (register.password == register.password2) {
+                this.$http.post('/auth/register', json, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    body = response.body
+                    this.status = body.status
+                    if (body.status == "success") {
+                        this.msg = "Successfully registered and logged in, directing to your homepage."
+                        setCookie('token_vikings', 'Authorization: Bearer '+body.auth_token, 365);
+                        setTimeout(function() {
+                            router.push({ name: 'profile', params: { username: json.username }})
+                        }, 3000);
+                    } else if (body.status == "fail") {
+                        this.msg = "There is already a user with this username or email."
+                    } else {
+                        this.msg = "Something unexpected happened, please try again later."
+                    }
+
+                });
+            } else {
+                this.msg = "Passwords doesn't match"
+            }
+            
+        }
+    }
 })
 
+
+var Profile = Vue.extend({
+    template: '#profile',
+    data: function(){
+        return {
+            username: this.$route.params.username,
+            token: "",
+            requester: null,
+        }
+    },
+    mounted: function() {
+        this.token = getCookie("token_vikings")
+        if (this.token) {
+            this.$http.get('/auth/status', {
+                headers: {
+                    'Authorization': this.token
+                }
+            }).then(response => {
+                this.requester = response.body.data;
+                console.log(response.body.data)
+            })
+        }
+        
+    }
+})
 
 var Pen = Vue.extend({
     template: '#pen',
@@ -65,7 +199,12 @@ const router = new VueRouter({
             path: '/pen/:pen_id',
             component: Pen,
             name: 'pen'
-        }
+        },
+        {
+            path: '/user/:username',
+            component: Profile,
+            name: 'profile'
+        },
     ]
 });
 
