@@ -31,43 +31,43 @@
             </div>
             <div id="id01__" class="modal">
 
-                    <div class="modal-content animate">
-                        <h2>Create a new project</h2>
-                        <div class="container">
-                            <form v-on:submit.prevent="createProject">
-                                <div v-if="status=='fail'" class="ui negative message">
-                                    <div class="header">
-                                        Error
-                                    </div>
-                                    <p>{{this.msg}}</p>
+                <div class="modal-content animate">
+                    <h2>Create a new project</h2>
+                    <div class="container">
+                        <form v-on:submit.prevent="createProject">
+                            <div v-if="status=='fail'" class="ui negative message">
+                                <div class="header">
+                                    Error
                                 </div>
+                                <p>{{this.msg}}</p>
+                            </div>
 
-                                <div v-if="status=='success'" class="ui  success message">
-                                    <div class="header">
-                                        Success
-                                    </div>
-                                    <p>{{this.msg}}</p>
+                            <div v-if="status=='success'" class="ui  success message">
+                                <div class="header">
+                                    Success
                                 </div>
-                                <label for="projectname"><b>Name</b></label>
-                                <input type="text" placeholder="Enter Name" name="projectname" v-model="project.name" required>
+                                <p>{{this.msg}}</p>
+                            </div>
+                            <label for="projectname"><b>Name</b></label>
+                            <input type="text" placeholder="Enter Name" name="projectname" v-model="project.name" required>
 
-                                <label for="projectndesc"><b>Description</b></label>
-                                <textarea type="projectndesc" placeholder="Enter Description" name="projectndesc" v-model="project.desc"></textarea>
+                            <label for="projectndesc"><b>Description</b></label>
+                            <textarea type="projectndesc" placeholder="Enter Description" name="projectndesc" v-model="project.desc"></textarea>
 
-                                <label for="projectndesc"><b>Public?</b></label>
-                                <input type="checkbox" name="projectpublic" v-model="project.is_public">
+                            <label for="projectndesc"><b>Public?</b></label>
+                            <input type="checkbox" name="projectpublic" v-model="project.is_public">
 
-                                <button type="submit">Create</button>
-                                
-                            </form>
-                        </div>
+                            <button type="submit">Create</button>
 
-                        <div class="container" style="background-color:#f1f1f1">
-                            <button type="button" onclick="document.getElementById('id01__').style.display='none'" class="cancelbtn">Cancel</button>
-                            
-                        </div>
+                        </form>
+                    </div>
+
+                    <div class="container" style="background-color:#f1f1f1">
+                        <button type="button" onclick="document.getElementById('id01__').style.display='none'" class="cancelbtn">Cancel</button>
+
                     </div>
                 </div>
+            </div>
             <!--main stuff here-->
             <div id="grad" class="otherprojects">
                 <div class="vikinganimationuser">
@@ -143,124 +143,125 @@
                         <h2 vue-else>Projects</h2>
                         <div class="ui link cards">
 
-                            <div class="ui card" onclick="location.href='main_page.html'" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
+                            <div  v-for="project_ in projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
 
                                 <div class="content">
                                     <center>
-                                        <div class="header"><a href="About_project.html">My first project</a><a><i class="star outline icon"
-                                            style="float:right;"></i></a> </div>
-                                            <div class="meta">
-                                                <a href="User_page.html"> Created by: {{username}}</a>
-                                            </div>
-                                        </center>
-                                        <div class="description">
-                                            Small Description.
+                                        <div class="header"><router-link :to="{ name: 'project', params: { 'project_id': project_.id }}">{{project_.name}}</router-link><a><i class="star outline icon"
+                                            style="float:right;"></i></a>
                                         </div>
+                                        <div class="meta">
+                                            <a href="User_page.html"> Created by: {{project_.owner}}</a>
+                                        </div>
+                                    </center>
+                                    <div class="description">
+                                        {{project_.description}}
                                     </div>
-                                    <div class="extra content">
-                                        <span class="right floated">
-                                            Created: Yesterday
-                                        </span>
-                                        <span>
-                                            0 stars
-                                        </span>
-                                    </div>
-                                    <button class="ui yellow bottom attached button">
-                                        <i class="random icon"></i>
-                                        Forked Projects
-                                    </button>
-                                </div>  
-                            </div>
-                            <br>
-                            <a style="float:left;padding-left:8px;padding-bottom:8px;padding-top:8px;font-size:25px;" class="item"
-                            href="Myprojects_page.html">Prev</a>
-                            <a style="float:right;padding-right:8px;padding-bottom:8px;padding-top:8px;font-size:25px;" class="item"
-                            href="Myprojects_page.html">Next></a>
-                            <br>
-
-
+                                </div>
+                                <div class="extra content">
+                                    <span class="right floated">
+                                        {{project_.datetime}}
+                                    </span>
+                                    <span>
+                                        {{project_.num_stars}} stars
+                                    </span>
+                                </div>
+                                <button class="ui yellow bottom attached button">
+                                    <i class="random icon"></i>
+                                    Forked Projects
+                                </button>
+                            </div>  
                         </div>
+                        <br>
+                        <a style="float:left;padding-left:8px;padding-bottom:8px;padding-top:8px;font-size:25px;" class="item"
+                        href="Myprojects_page.html">Prev</a>
+                        <a style="float:right;padding-right:8px;padding-bottom:8px;padding-top:8px;font-size:25px;" class="item"
+                        href="Myprojects_page.html">Next></a>
+                        <br>
+
+
                     </div>
                 </div>
             </div>
-        </template>
+        </div>
+    </template>
 
-        <template id="home">
+    <template id="home">
 
-            <div>
-                <!-- The Sign in Modal -->
-                <div id="id01" class="modal">
+        <div>
+            <!-- The Sign in Modal -->
+            <div id="id01" class="modal">
 
-                    <div class="modal-content animate">
-                        <div class="imgcontainer">
-                            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-                            <img src="semantic/assets/img/Helmet Cutout.png" alt="Avatar" class="avatar">
-                        </div>
+                <div class="modal-content animate">
+                    <div class="imgcontainer">
+                        <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                        <img src="semantic/assets/img/Helmet Cutout.png" alt="Avatar" class="avatar">
+                    </div>
 
-                        <div class="container">
-                            <form v-on:submit.prevent="logInUser">
-                                <div v-if="status=='fail'" class="ui negative message">
-                                    <div class="header">
-                                        Error
-                                    </div>
-                                    <p>{{this.msg}}</p>
+                    <div class="container">
+                        <form v-on:submit.prevent="logInUser">
+                            <div v-if="status=='fail'" class="ui negative message">
+                                <div class="header">
+                                    Error
                                 </div>
+                                <p>{{this.msg}}</p>
+                            </div>
 
-                                <div v-if="status=='success'" class="ui  success message">
-                                    <div class="header">
-                                        Success
-                                    </div>
-                                    <p>{{this.msg}}</p>
+                            <div v-if="status=='success'" class="ui  success message">
+                                <div class="header">
+                                    Success
                                 </div>
-                                <label for="username"><b>Username</b></label>
-                                <input type="text" placeholder="Enter Username" name="username" v-model="login.username" required>
+                                <p>{{this.msg}}</p>
+                            </div>
+                            <label for="username"><b>Username</b></label>
+                            <input type="text" placeholder="Enter Username" name="username" v-model="login.username" required>
 
-                                <label for="password"><b>Password</b></label>
-                                <input type="password" placeholder="Enter Password" name="password" v-model="login.password" required>
+                            <label for="password"><b>Password</b></label>
+                            <input type="password" placeholder="Enter Password" name="password" v-model="login.password" required>
 
-                                <button type="submit">Login</button>
-                                <label>
-                                    <input type="checkbox" checked="checked" name="remember"> Remember me
-                                </label>
-                            </form>
-                        </div>
+                            <button type="submit">Login</button>
+                            <label>
+                                <input type="checkbox" checked="checked" name="remember"> Remember me
+                            </label>
+                        </form>
+                    </div>
 
-                        <div class="container" style="background-color:#f1f1f1">
-                            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-                            <span class="psw"><a href="#" id="forgotid" onclick="document.getElementById('forgottenID').style.display='block'">Forgot
-                            password?</a></span>
-                        </div>
+                    <div class="container" style="background-color:#f1f1f1">
+                        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+                        <span class="psw"><a href="#" id="forgotid" onclick="document.getElementById('forgottenID').style.display='block'">Forgot
+                        password?</a></span>
                     </div>
                 </div>
+            </div>
 
-                <!--Forgot Password Modal-->
-                <div id="forgottenID" class="modal">
+            <!--Forgot Password Modal-->
+            <div id="forgottenID" class="modal">
 
-                    <form class="modal-content animate" action="/action_page.php">
+                <form class="modal-content animate" action="/action_page.php">
+                    <div class="container">
+                        <label for="Sendpass"><b>Enter email and we will send the password</b></label>
+                        <input type="text" placeholder="Leif-erikson@vikings.com">
+
+                        <button type="submit">Send</button>
+                    </div>
+
+                    <div class="container" style="background-color:#f1f1f1">
+                        <button type="button" onclick="document.getElementById('forgottenID').style.display='none'" class="cancelbtn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <!--The Register Modal-->
+            <div id="id02" class="modal register">
+
+                <form class="modal-content animate" action="/action_page.php">
+                    <div class="imgcontainer">
+                        <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                        <img src="semantic/assets/img/Helmet Cutout.png" alt="Avatar" class="avatar">
+                    </div>
+
+                    <form v-on:submit.prevent="registerUser">
                         <div class="container">
-                            <label for="Sendpass"><b>Enter email and we will send the password</b></label>
-                            <input type="text" placeholder="Leif-erikson@vikings.com">
-
-                            <button type="submit">Send</button>
-                        </div>
-
-                        <div class="container" style="background-color:#f1f1f1">
-                            <button type="button" onclick="document.getElementById('forgottenID').style.display='none'" class="cancelbtn">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-
-                <!--The Register Modal-->
-                <div id="id02" class="modal register">
-
-                    <form class="modal-content animate" action="/action_page.php">
-                        <div class="imgcontainer">
-                            <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
-                            <img src="semantic/assets/img/Helmet Cutout.png" alt="Avatar" class="avatar">
-                        </div>
-
-                        <form v-on:submit.prevent="registerUser">
-                            <div class="container">
                     <!-- <label for="fname"><b>First Name</b></label>
                     <input type="text" placeholder="Leif" name="fname" required>
 
@@ -345,7 +346,7 @@
             <h5 style="position:absolute; Top:210px; right:400px; left:850px;white-space: nowrap;">Don't get swept
             away. Learn code with the Vikings!</h5>
             Hello World! <br>
-            <router-link :to="{ name: 'project', params: { project_id: 1 }}">Sample Pen 1</router-link>  
+            <router-link :to="{ name: 'project', params: { project_id: 1 }}">Sample Pen 1</router-link>
             <router-link :to="{ name: 'project', params: { project_id: 2 }}">Sample Pen 2</router-link>  
             <div class="topwave wavepropertiesblue"></div>
             <div class="middlewave2lightblue wavepropertieslightblue"></div>
@@ -377,172 +378,172 @@
 <template id="project">
     <div>
         <!-- The Save as Modal -->
-    <div id="id01" class="modal">
+        <div id="id01" class="modal">
 
-        <form class="modal-content animate" action="/action_page.php">
-            <div class="imgcontainer">
-                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-            </div>
+            <form class="modal-content animate" action="/action_page.php">
+                <div class="imgcontainer">
+                    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                </div>
 
-            <div class="container">
-                <label for="filename"><b>File Name</b></label>
-                <input type="text" placeholder="Enter File Name" name="Saveasfilename" required>
+                <div class="container">
+                    <label for="filename"><b>File Name</b></label>
+                    <input type="text" placeholder="Enter File Name" name="Saveasfilename" required>
 
-                <label for="aboutfile"><b>Write a Description</b></label>
-                <input type="text" placeholder="Write Description About Code" name="aboutcode" rows=20>
+                    <label for="aboutfile"><b>Write a Description</b></label>
+                    <input type="text" placeholder="Write Description About Code" name="aboutcode" rows=20>
 
-                <button type="save">Save</button>
-            </div>
-        </form>
-    </div>
+                    <button type="save">Save</button>
+                </div>
+            </form>
+        </div>
 
-    <!-- The Comment Modal -->
-    <div id="id02" class="modal">
+        <!-- The Comment Modal -->
+        <div id="id02" class="modal">
 
-        <form class="modal-content animate" action="/action_page.php">
-            <div class="imgcontainer">
-                <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
-            </div>
+            <form class="modal-content animate" action="/action_page.php">
+                <div class="imgcontainer">
+                    <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                </div>
 
-            <div class="container">
-                <label for="commentonfile"><b>Write a Comment</b></label>
-                <textarea rows=30 style="width:100%"></textarea>
+                <div class="container">
+                    <label for="commentonfile"><b>Write a Comment</b></label>
+                    <textarea rows=30 style="width:100%"></textarea>
 
-                <button type="save">Save</button>
-            </div>
-        </form>
-    </div>
+                    <button type="save">Save</button>
+                </div>
+            </form>
+        </div>
 
-    <!-- Are you sure Modal -->
-    <div id="id03" class="modal">
+        <!-- Are you sure Modal -->
+        <div id="id03" class="modal">
 
-        <form class="modal-content animate" action="/action_page.php">
-            <div class="imgcontainer">
-                <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
-            </div>
+            <form class="modal-content animate" action="/action_page.php">
+                <div class="imgcontainer">
+                    <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
+                </div>
 
-            <div class="container">
-                <center><label for="newfile"><b>Are you sure you want to start a new file?</b></label></center>
+                <div class="container">
+                    <center><label for="newfile"><b>Are you sure you want to start a new file?</b></label></center>
 
-                <button type="yes" onclick="document.getElementById('id03').style.display='none'" style="background-color: #4CAF50;"
+                    <button type="yes" onclick="document.getElementById('id03').style.display='none'" style="background-color: #4CAF50;"
                     href="main_page.html">yes</button>
-                <button type="no" onclick="document.getElementById('id03').style.display='none'" style="background-color: #f44336;">no</button>
-            </div>
-        </form>
-    </div>
-
-    <!-- Play Modal -->
-    <div id="id04" class="modal">
-
-        <form class="modal-content animate" action="/action_page.php">
-            <div class="imgcontainer">
-                <span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal">&times;</span>
-            </div>
-
-            <div class="container">
-                
-            </div>
-        </form>
-    </div>
-
-    <!--creates main body-->
-    <div class="wrapper">
-        <!--top main bar-->
-        <div class="ui top fixed menu">
-            <div class="left top fixed menu">
-                <div class="item">
-                    <img src="semantic/assets/img/helmet_color_1_PUS_icon.ico">
+                    <button type="no" onclick="document.getElementById('id03').style.display='none'" style="background-color: #f44336;">no</button>
                 </div>
-                <router-link :to="{ name: 'profile', params: { 'username':  requester.username}}" class="item linkref"><i class="home icon"></i>Home</router-link>
-                
-                <a href="Just_blockly.html" class="item linkref">Just Blockly</a>
-                <a href="Just_code.html" class="item linkref">Just Code</a>
-                <a href="#" class="item linkref"><i class="save icon"></i>Save</a>
-                <a href="#" class="item linkref" onclick="document.getElementById('id01').style.display='block'"><i
-                        class="pencil alternate icon"></i>Save As</a>
-                <a class="item linkref" onclick="document.getElementById('id02').style.display='block'"><i class="address book outline icon"></i>Comment</a>
-                <a class="item linkref" onclick="document.getElementById('id03').style.display='block'"><i class="file alternate icon"></i>New
-                    Project</a>
-                <a class="item linkref" onclick="document.getElementById('id04').style.display='block'"><i class="play icon"></i></a>   
-                <a href="#" class="item linkref"><i class="random icon"></i>Fork</a>
-                <a class="item linkref"> <i class="star outline icon"></i></a>
+            </form>
+        </div>
 
-                <div class="ui category search item">
-                    <div class="ui icon input">
-                        <input class="prompt" type="text" placeholder="Search Projects...">
-                        <i class="search link icon"></i>
+        <!-- Play Modal -->
+        <div id="id04" class="modal">
+
+            <form class="modal-content animate" action="/action_page.php">
+                <div class="imgcontainer">
+                    <span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal">&times;</span>
+                </div>
+
+                <div class="container">
+
+                </div>
+            </form>
+        </div>
+
+        <!--creates main body-->
+        <div class="wrapper">
+            <!--top main bar-->
+            <div class="ui top fixed menu">
+                <div class="left top fixed menu">
+                    <div class="item">
+                        <img src="semantic/assets/img/helmet_color_1_PUS_icon.ico">
                     </div>
-                </div>
-                <div class="item" style="float:right;">
-                    <div class="ui dropdown">
-                        <i class="user teal circle icon big"></i>
-                        <div class="menu">
-                            <div class="item">New</div>
-                            <div class="item">
-                                <span class="description">ctrl + o</span>
-                                Open...
+                    <router-link :to="{ name: 'profile', params: { 'username':  requester.username}}" class="item linkref"><i class="home icon"></i>Home</router-link>
+
+                    <a href="Just_blockly.html" class="item linkref">Just Blockly</a>
+                    <a href="Just_code.html" class="item linkref">Just Code</a>
+                    <a class="item linkref" v-on:click="save()"><i class="save icon"></i>Save</a>
+                    <a href="#" class="item linkref" onclick="document.getElementById('id01').style.display='block'"><i
+                        class="pencil alternate icon"></i>Save As</a>
+                        <a class="item linkref" onclick="document.getElementById('id02').style.display='block'"><i class="address book outline icon"></i>Comment</a>
+                        <a class="item linkref" onclick="document.getElementById('id03').style.display='block'"><i class="file alternate icon"></i>New
+                        Project</a>
+                        <a class="item linkref" onclick="document.getElementById('id04').style.display='block'"><i class="play icon"></i></a>   
+                        <a href="#" class="item linkref"><i class="random icon"></i>Fork</a>
+                        <a class="item linkref"> <i class="star outline icon"></i></a>
+
+                        <div class="ui category search item">
+                            <div class="ui icon input">
+                                <input class="prompt" type="text" placeholder="Search Projects...">
+                                <i class="search link icon"></i>
                             </div>
-                            <div class="item">
-                                <span class="description">ctrl + s</span>
-                                Save as...
-                            </div>
-                            <div class="item">
-                                <span class="description">ctrl + r</span>
-                                Rename
-                            </div>
-                            <div class="item">Make a copy</div>
-                            <div class="item">
-                                <i class="folder icon"></i>
-                                Move to folder
-                            </div>
-                            <div class="item">
-                                <i class="trash icon"></i>
-                                Move to trash
-                            </div>
-                            <div class="divider"></div>
-                            <div class="item">Download As...</div>
-                            <div class="item">
-                                <i class="dropdown icon"></i>
-                                Publish To Web
+                        </div>
+                        <div class="item" style="float:right;">
+                            <div class="ui dropdown">
+                                <i class="user teal circle icon big"></i>
                                 <div class="menu">
-                                    <div class="item">Google Docs</div>
-                                    <div class="item">Google Drive</div>
-                                    <div class="item">Dropbox</div>
-                                    <div class="item">Adobe Creative Cloud</div>
-                                    <div class="item">Private FTP</div>
-                                    <div class="item">Another Service...</div>
+                                    <div class="item">New</div>
+                                    <div class="item">
+                                        <span class="description">ctrl + o</span>
+                                        Open...
+                                    </div>
+                                    <div class="item">
+                                        <span class="description">ctrl + s</span>
+                                        Save as...
+                                    </div>
+                                    <div class="item">
+                                        <span class="description">ctrl + r</span>
+                                        Rename
+                                    </div>
+                                    <div class="item">Make a copy</div>
+                                    <div class="item">
+                                        <i class="folder icon"></i>
+                                        Move to folder
+                                    </div>
+                                    <div class="item">
+                                        <i class="trash icon"></i>
+                                        Move to trash
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="item">Download As...</div>
+                                    <div class="item">
+                                        <i class="dropdown icon"></i>
+                                        Publish To Web
+                                        <div class="menu">
+                                            <div class="item">Google Docs</div>
+                                            <div class="item">Google Drive</div>
+                                            <div class="item">Dropbox</div>
+                                            <div class="item">Adobe Creative Cloud</div>
+                                            <div class="item">Private FTP</div>
+                                            <div class="item">Another Service...</div>
+                                        </div>
+                                    </div>
+                                    <div class="item">E-mail Collaborators</div>
                                 </div>
                             </div>
-                            <div class="item">E-mail Collaborators</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <!--Right side of the document for code-->
-    <div class="split left">
-        <div class="form infront">
-            <div class="field"></div>
-            <textarea rows="42">{{js_code}}</textarea>
-        </div>
-    </div>
+            <!--Right side of the document for code-->
+            <div class="split left">
+                <div class="form infront">
+                    <div class="field"></div>
+                    <textarea rows="42">{{js_code}}</textarea>
+                </div>
+            </div>
 
-    <!--left side of the document for blockly-->
-    <div class="split right">
-        <div id="blocklyDiv" ref="blocklyDiv" style="height: 480px; width: 600px;"></div>
-        <xml id="toolbox" ref="toolbox"  style="display: none">
-            <block type="controls_if"></block>
-            <block type="controls_repeat_ext"></block>
-            <block type="logic_compare"></block>
-            <block type="math_number"></block>
-            <block type="math_arithmetic"></block>
-            <block type="text"></block>
-            <block type="text_print"></block>
-        </xml>
+            <!--left side of the document for blockly-->
+            <div class="split right">
+                <div id="blocklyDiv" ref="blocklyDiv" style="height: 480px; width: 600px;"></div>
+                <xml id="toolbox" ref="toolbox"  style="display: none">
+                    <block type="controls_if"></block>
+                    <block type="controls_repeat_ext"></block>
+                    <block type="logic_compare"></block>
+                    <block type="math_number"></block>
+                    <block type="math_arithmetic"></block>
+                    <block type="text"></block>
+                    <block type="text_print"></block>
+                </xml>
 
-    </div>
-    <!--choices-->
+            </div>
+            <!--choices-->
     <!-- <div id="mySidenav" class="sidenav">
 
         <div id="choices1" class="aboutchoices choices expandedbox">
@@ -608,8 +609,8 @@
 
 
     </div> -->
-        
-    </div>
+
+</div>
 </template>
 
 <script src="blockly_compressed.js"></script>

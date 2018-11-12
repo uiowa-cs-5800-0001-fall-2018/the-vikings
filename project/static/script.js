@@ -118,10 +118,11 @@ var Profile = Vue.extend({
         return {
             username: this.$route.params.username,
             token: "",
-            requester: null,
+            requester: {username: null},
             project: {},
             msg: null,
             status: null,
+            projects: []
         }
     },
     mounted: function() {
@@ -135,6 +136,16 @@ var Profile = Vue.extend({
                 this.requester = response.body.data;
             })
         }
+        this.$http.get('/user/' + this.username, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(response => {
+            if (response.body.status == "success") {
+                this.projects = response.body.data
+            }
+        })
+
         
     },
     methods: {
@@ -178,6 +189,7 @@ var Project = Vue.extend({
             js_code: '',
             workspace: null,
             requester: {"username": null},
+            token: null,
         }
     },
     mounted: function() {
@@ -225,12 +237,27 @@ var Project = Vue.extend({
             var code = Blockly.JavaScript.workspaceToCode(this.workspace);
             this.js_code = code;
             
-            // var xml = Blockly.Xml.workspaceToDom(workspace);
-            // var xml_text = Blockly.Xml.domToText(xml);
-            // console.log(xml_text)
+            
         },
         save: function(){
-            // save the code!!!
+            var xml = Blockly.Xml.workspaceToDom(this.workspace);
+            var xml_text = Blockly.Xml.domToText(xml);
+            json = {"p_id": this.project_id, "content": xml_text}
+            this.$http.post('/save_project', json, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.token
+                }
+            }).then(response => {
+                body = response.body
+                // this.status = body.status
+                if (body.status == "success") {
+                    alert("saved")
+                } else {
+                    alert("sth is wrong")
+                }
+
+            });
         }
     }
 })

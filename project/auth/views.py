@@ -191,7 +191,7 @@ auth_blueprint.add_url_rule(
     methods=['POST']
 )
 
-# curl --header "Content-Type: application/json" --request POST --data '{,"email":"ehhe","password":"xyz"}' http://104.248.121.89:5000/auth/login
+# curl --header "Content-Type: application/json" --request POST --data '{"email":"ehhe","password":"xyz"}' http://104.248.121.89:5000/auth/login
 auth_blueprint.add_url_rule(
     '/auth/login',
     view_func=login_view,
