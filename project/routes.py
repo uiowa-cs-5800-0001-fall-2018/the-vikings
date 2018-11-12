@@ -1,5 +1,7 @@
-import db_connections
-from __init__ import app, jsonify
+from project import db_connections
+from project.database_controller.user_projects import get_project
+from flask import jsonify
+from project.database_controller.app import app
 
 @app.route('/')
 def homepage():
@@ -11,6 +13,11 @@ def data(pen_id):
 
 	return jsonify(content)
 
+@app.route("/projects/<project_id>")
+def project_data(project_id):
+	content = get_project(int(project_id))
+
+	return content
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
