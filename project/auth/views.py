@@ -15,11 +15,12 @@ class RegisterAPI(MethodView):
         # get the post data
         post_data = request.get_json()
         # check if user already exists
-        user = User.query.filter_by(email=post_data.get('email')).first()
+        user = User.query.filter_by(email=post_data.get('email'), username=post_data.get('username')).first()
         if not user:
             try:
                 user = User(
                     email=post_data.get('email'),
+                    username=post_data.get('username'),
                     password=post_data.get('password')
                 )
 
@@ -60,7 +61,7 @@ class LoginAPI(MethodView):
         try:
             # fetch the user data
             user = User.query.filter_by(
-                email=post_data.get('email')
+                username=post_data.get('username')
             ).first()
             if user and bcrypt.check_password_hash(
                 user.password, post_data.get('password')
@@ -78,7 +79,7 @@ class LoginAPI(MethodView):
                     'status': 'fail',
                     'message': 'User does not exist.'
                 }
-                return make_response(jsonify(responseObject)), 404
+                return make_response(jsonify(responseObject)), 200
         except Exception as e:
             print(e)
             responseObject = {
@@ -115,6 +116,7 @@ class UserAPI(MethodView):
                     'data': {
                         'user_id': user.id,
                         'email': user.email,
+                        'username': user.username,
                         'admin': user.admin,
                         'registered_on': user.registered_on
                     }
@@ -199,7 +201,7 @@ auth_blueprint.add_url_rule(
     methods=['POST']
 )
 
-# curl --header "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDM2MzQ2MTIsImlhdCI6MTU0MTA0MjYxMiwic3ViIjoyfQ.Jo2gim_ujR8i1sC7Ys2Htw6BKq9aUKMZarRzZdQ7O7w" --request GET  http://104.248.121.89:5000/auth/status
+# curl --header "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDQ1ODQ4MDEsImlhdCI6MTU0MTk5MjgwMSwic3ViIjozfQ._Ai3fVVbcJ5QlOSOUvHpH_nS6E9dIG_4HfvKR8NcfiU" --request GET  http://104.248.121.89:5000/auth/status
 auth_blueprint.add_url_rule(
     '/auth/status',
     view_func=user_view,

@@ -1,54 +1,373 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Vikings</title>
-        <meta name="description" content="münhasır is a cloud based platform that enables users to write and keep military class encrypted diaries."/>
-        <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css'>
-        <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/summernote/0.8.3/summernote.css">
-    </head>
-    <body>
-        <main id="app"></main>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vikings</title>
+    <meta name="description" content="münhasır is a cloud based platform that enables users to write and keep military class encrypted diaries."/>
+    <link rel="stylesheet" type="text/css" href="semantic/assets/css/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="semantic/assets/css/mycss1.css">
+</head>
+<body>
+    <main id="app"></main>
+
+    <template id="profile">
+        <div>
+            <div id="id01" class="modal">
+
+                <form class="modal-content animate" action="/action_page.php">
+                    <h3 style="text-align:center;padding-top:8px;">Please ask any questions or comments and we will reply to
+                    you via email.</h3>
+                    <div class="container">
+                        <textarea rows=20 style="width:100%"></textarea>
+                    </div>
+
+                    <div class="container" style="background-color:#f1f1f1">
+                        <button type="submit">Send</button>
+                        <button type="button" onclick="document.getElementById('id01').style.display='none'" style="background-color:red;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            <!--main stuff here-->
+            <div id="grad" class="otherprojects">
+                <div class="vikinganimationuser">
+                    <div class="ui container">
+                        <div class="ui secondary top large menu">
+                            <div class="right item">
+                                <div class="ui category search item">
+                                    <div class="ui icon input">
+                                        <input class="prompt" type="text" placeholder="Search Projects...">
+                                        <i class="search link icon"></i>
+                                    </div>
+                                    <div class="results"></div>
+                                </div>
+                                <a class="item" href="Home_page.html">
+                                    Sign out
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui vertical large menu inverted" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);">
+                        <!--User changes sidenav-->
+                        <div id="userchanges" class="userchanges">
+                            <a href="javascript:void(0)" class="closebtn" onclick="closeUserChanges()">&times;</a>
+                            <a href="#">Change Avatar</a>
+                            <a href="#">Change Username</a>
+                            <a href="#">Change Password</a>
+                            <a href="#">Edit Bio</a>
+
+                        </div>
+                        <div class="item" id="userside">
+                            <center>
+                                <span style="font-size:30px;cursor:pointer" onclick="openUserChanges()">
+                                    <img src="semantic/assets/img/Helmet Cutout.png" height="100" width="100" style="border-radius:50%;  border:1px solid black; background-color:white;">
+                                </span>
+                                <h4>{{username}}</h4>
+                            </center>
+                        </div>
+                        <div class="item">
+                            <div class="header">Home</div>
+                            <div class="menu">
+                                <router-link class="item" :to="{ name: 'profile', params: { 'username':  username}}">My Page</router-link> 
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="header">Projects</div>
+                            <div class="menu">
+                                <a class="item" href="main_page.html">New Project</a>
+                                <a class="item" href="Other_projects.html">Other Projects</a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="header">Find Friends</div>
+                            <div class="menu">
+                                <a class="item" href="search_friends.html">Search Friends</a>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="header">Support</div>
+                            <div class="menu">
+                                <a class="item" href="main_page.html">Tutorial</a>
+                                <a class="item" id="openemailsupport"  onclick="document.getElementById('id01').style.display='block'">E-mail Support</a>
+                                <a class="item" href="FAQ_page.html">FAQs</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="centered-information">
+                        <center>
+                            <h2 v-if="username===requester.username">My Projects!</h2>
+                        </center>
+                        <br>
+                        <h2 v-if="username==requester.username">Your Projects!</h2>
+                        <h2 vue-else>Projects</h2>
+                        <div class="ui link cards">
+
+                            <div class="ui card" onclick="location.href='main_page.html'" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
+
+                                <div class="content">
+                                    <center>
+                                        <div class="header"><a href="About_project.html">My first project</a><a><i class="star outline icon"
+                                            style="float:right;"></i></a> </div>
+                                            <div class="meta">
+                                                <a href="User_page.html"> Created by: {{username}}</a>
+                                            </div>
+                                        </center>
+                                        <div class="description">
+                                            Small Description.
+                                        </div>
+                                    </div>
+                                    <div class="extra content">
+                                        <span class="right floated">
+                                            Created: Yesterday
+                                        </span>
+                                        <span>
+                                            0 stars
+                                        </span>
+                                    </div>
+                                    <button class="ui yellow bottom attached button">
+                                        <i class="random icon"></i>
+                                        Forked Projects
+                                    </button>
+                                </div>  
+                            </div>
+                            <br>
+                            <a style="float:left;padding-left:8px;padding-bottom:8px;padding-top:8px;font-size:25px;" class="item"
+                            href="Myprojects_page.html">Prev</a>
+                            <a style="float:right;padding-right:8px;padding-bottom:8px;padding-top:8px;font-size:25px;" class="item"
+                            href="Myprojects_page.html">Next></a>
+                            <br>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
         <template id="home">
-            
+
             <div>
+                <!-- The Sign in Modal -->
+                <div id="id01" class="modal">
+
+                    <div class="modal-content animate">
+                        <div class="imgcontainer">
+                            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                            <img src="semantic/assets/img/Helmet Cutout.png" alt="Avatar" class="avatar">
+                        </div>
+
+                        <div class="container">
+                            <form v-on:submit.prevent="logInUser">
+                                <div v-if="status=='fail'" class="ui negative message">
+                                    <div class="header">
+                                        Error
+                                    </div>
+                                    <p>{{this.msg}}</p>
+                                </div>
+
+                                <div v-if="status=='success'" class="ui  success message">
+                                    <div class="header">
+                                        Success
+                                    </div>
+                                    <p>{{this.msg}}</p>
+                                </div>
+                                <label for="username"><b>Username</b></label>
+                                <input type="text" placeholder="Enter Username" name="username" v-model="login.username" required>
+
+                                <label for="password"><b>Password</b></label>
+                                <input type="password" placeholder="Enter Password" name="password" v-model="login.password" required>
+
+                                <button type="submit">Login</button>
+                                <label>
+                                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                                </label>
+                            </form>
+                        </div>
+
+                        <div class="container" style="background-color:#f1f1f1">
+                            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+                            <span class="psw"><a href="#" id="forgotid" onclick="document.getElementById('forgottenID').style.display='block'">Forgot
+                            password?</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Forgot Password Modal-->
+                <div id="forgottenID" class="modal">
+
+                    <form class="modal-content animate" action="/action_page.php">
+                        <div class="container">
+                            <label for="Sendpass"><b>Enter email and we will send the password</b></label>
+                            <input type="text" placeholder="Leif-erikson@vikings.com">
+
+                            <button type="submit">Send</button>
+                        </div>
+
+                        <div class="container" style="background-color:#f1f1f1">
+                            <button type="button" onclick="document.getElementById('forgottenID').style.display='none'" class="cancelbtn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!--The Register Modal-->
+                <div id="id02" class="modal register">
+
+                    <form class="modal-content animate" action="/action_page.php">
+                        <div class="imgcontainer">
+                            <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                            <img src="semantic/assets/img/Helmet Cutout.png" alt="Avatar" class="avatar">
+                        </div>
+
+                        <form v-on:submit.prevent="registerUser">
+                            <div class="container">
+                    <!-- <label for="fname"><b>First Name</b></label>
+                    <input type="text" placeholder="Leif" name="fname" required>
+
+                    <label for="lname"><b>Last Name</b></label>
+                    <input type="text" placeholder="Erikson" name="lname" required> -->
+                    <div v-if="status=='fail'" class="ui negative message">
+                        <div class="header">
+                            Error
+                        </div>
+                        <p>{{this.msg}}</p>
+                    </div>
+
+                    <div v-if="status=='success'" class="ui  success message">
+                        <div class="header">
+                            Success
+                        </div>
+                        <p>{{this.msg}}</p>
+                    </div>
+                    <label for="uname"><b>Username</b></label>
+                    <input type="text" placeholder="Enter Username" name="username" v-model="register.username" required>
+
+                    <label for="email"><b>Email Address</b></label>
+                    <input type="text" placeholder="Leif-erikson@vikings.com" name="email" v-model="register.email" required>
+
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" id="passwordchoice" placeholder="Password must be >= 6 characters" name="password" v-model="register.password"
+                    onkeyup="correctpass();" required>
+
+                    <label for="psw"><b>Repeat Password</b></label>
+                    <input type="password" id="passwordchecking" placeholder="Repeat Password" name="password" v-model="register.password2" onkeyup="correctpass();"
+                    required>
+                    <span id="incorrect_message"></span>
+
+                    <button type="submit">Login</button>
+                    <label>
+                        <input type="checkbox" checked="checked" name="remember"> Remember me
+                    </label>
+                </div>
+            </form>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+
+    <!--main stuff here-->
+    <div id="grad">
+        <div class="ui container">
+            <div class="ui secondary top large menu">
+                <div class="left item">
+                    <a class="toc item">
+
+                    </a>
+                </div>
+                <div class="right item">
+                    <div class="ui search">
+                        <div class="ui icon input">
+                            <input class="prompt" type="text" placeholder="Search Projects...">
+                            <i class="search link icon"></i>
+                        </div>
+                        <div class="results"></div>
+
+                    </div>
+                    <a class="item" href="main_page.html">
+                        Tutorial
+                    </a>
+                    <a class="item" id="signin" onclick="document.getElementById('id01').style.display='block'">
+                        Sign in
+                    </a>
+                    <a class="item" id="registermod" onclick="document.getElementById('id02').style.display='block'">
+                        Register
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="vikinganimation">
+            <h5 style="position:absolute; Top:200px; right:500px;left:800px;white-space: nowrap;">In a sea of code it
+            is easy to get swept away...</h5>
+            <h5 style="position:absolute; Top:210px; right:400px; left:850px;white-space: nowrap;">Don't get swept
+            away. Learn code with the Vikings!</h5>
             Hello World! <br>
             <router-link :to="{ name: 'pen', params: { pen_id: 1 }}">Sample Pen 1</router-link>  
             <router-link :to="{ name: 'pen', params: { pen_id: 2 }}">Sample Pen 2</router-link>  
-            </div>
-        </template>
+            <div class="topwave wavepropertiesblue"></div>
+            <div class="middlewave2lightblue wavepropertieslightblue"></div>
+            <div class="middlewave2white wavepropertieswhite"></div>
+            <div class="middlewave2 wavepropertiesblue"></div>
+            <div class="middlewave1lightblue wavepropertieslightblue"></div>
+            <div class="vikingship"></div>
+            <div class="middlewave1white wavepropertieswhite"></div>
+            <div class="middlewave1 wavepropertiesblue"></div>
+            <div class="bottomwavelightblue wavepropertieslightblue"></div>
+            <div class="bottomwavewhite wavepropertieswhite"></div>
+            <div class="bottomwave wavepropertiesblue"></div>
 
-        <template id="pen">
-            <div>
-                <div id="blocklyDiv" ref="blocklyDiv" style="height: 480px; width: 600px;"></div>
-                <xml id="toolbox" ref="toolbox"  style="display: none">
-                    <block type="controls_if"></block>
-                    <block type="controls_repeat_ext"></block>
-                    <block type="logic_compare"></block>
-                    <block type="math_number"></block>
-                    <block type="math_arithmetic"></block>
-                    <block type="text"></block>
-                    <block type="text_print"></block>
-                </xml>
-                <textarea id="textarea">{{js_code}}</textarea>
+        </div>
 
-            <router-link :to="{ name: 'home'}">Return Home</router-link>  
-            </div>
-        </template>
+        <div class="bluebackground">
+            <div class="transitionlightblue wavepropertieslightblue"></div>
 
-        <script src="blockly_compressed.js"></script>
-        <script src="blocks_compressed.js"></script>
-        <script src="msg/js/en.js"></script>
-        <script src="javascript_compressed.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js'></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.3.1/vue-router.min.js'></script>
-        <script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.min.js"></script>
-        <script src="script.js"></script>
-    </body>
+        </div>
+        <div class="lightbluebackground">
+
+        </div>
+
+    </div>
+
+</div>
+</template>
+
+<template id="pen">
+    <div>
+        <div id="blocklyDiv" ref="blocklyDiv" style="height: 480px; width: 600px;"></div>
+        <xml id="toolbox" ref="toolbox"  style="display: none">
+            <block type="controls_if"></block>
+            <block type="controls_repeat_ext"></block>
+            <block type="logic_compare"></block>
+            <block type="math_number"></block>
+            <block type="math_arithmetic"></block>
+            <block type="text"></block>
+            <block type="text_print"></block>
+        </xml>
+        <textarea id="textarea">{{js_code}}</textarea>
+
+        <router-link :to="{ name: 'home'}">Return Home</router-link>  
+    </div>
+</template>
+
+<script src="blockly_compressed.js"></script>
+<script src="blocks_compressed.js"></script>
+<script src="msg/js/en.js"></script>
+<script src="javascript_compressed.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+
+<script type="text/javascript" src="semantic/assets/js/semantic.min.js"></script>
+<script type="text/javascript" src="semantic/assets/js/myjs.js"></script>
+<script type="text/javascript" src="semantic/assets/js/jquery.min.js"></script>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.3.1/vue-router.min.js'></script>
+<script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
+
+<script src="script.js"></script>
+</body>
 </html>
