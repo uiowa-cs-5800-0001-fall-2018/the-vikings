@@ -107,9 +107,12 @@ overflow: auto;
     min-width:1300px;
 }
 #grad.otherprojects{
-    height:160%;
+    min-height:100%;
+    min-width:100%;
     width:100%;
-    background: linear-gradient(to top, rgba(0, 204, 255, 0), rgb(0, 204, 255)); /* Standard syntax (must be last) */
+    height:auto;
+    background: linear-gradient(to top,rgb(0, 204, 255),rgb(79, 81, 226), rgb(0, 204, 255)); /* Standard syntax (must be last) */
+    background-repeat: repeat;
     padding-top:0px;
     z-index:1;
     min-width:1300px;
@@ -266,7 +269,7 @@ overflow: auto;
 }
 
 .vikinganimationuser{
-    background: linear-gradient(to bottom, rgba(66, 66, 66, 0), rgb(79, 81, 226));
+    /*background: linear-gradient(to bottom, rgba(66, 66, 66, 0), rgb(79, 81, 226));*/
     height:100%;
 }
 
@@ -276,36 +279,36 @@ overflow: auto;
     background-repeat: repeat-x;
     position:absolute; 
     height:200px; 
-    width:1518px; 
+    width:100%; 
     background-size: 240px 70px;
     background-image:url(../../../semantic/assets/img/Bluewave.png);
 }
 
 .wavepropertieswhite{
     background-repeat: repeat-x;
-    position:relative; 
+    position:absolute; 
     height:200px; 
-    width:1678px; 
+    width:100%; 
     background-size: 240px 70px;
     background-image:url(../../../semantic/assets/img/Whitewave.png);
-    right:160px;
+    left:-160px;
 }
 .wavepropertieslightblue{
-    background-repeat: repeat-x;
-    position:relative; 
-    height:200px; 
-    width:1602px; 
-    background-size: 240px 70px;
     background-image:url(../../../semantic/assets/img/LightBluewave.png);
-    right:85px;
+    background-repeat: repeat-x;
+    position:absolute; 
+    height:200px; 
+    width:100%; 
+    background-size: 240px 70px;
+    left:-80px;
 }
 
 /*bottom level waves*/
 .bottomwavelightblue{
-    Top:-190px; 
+    Top:708px; 
 }
 .bottomwavewhite{
-    Top:-390px; 
+    Top:710px; 
 }
 .bottomwave{
     Top:710px; 
@@ -313,10 +316,10 @@ overflow: auto;
 
 /*middle first level waves*/
 .middlewave1lightblue{
-    Top:170px; 
+    Top:665px; 
 }
 .middlewave1white {
-    Top:-30px;
+    Top:675px;
 }
 .middlewave1{
     Top:670px;
@@ -324,10 +327,10 @@ overflow: auto;
 
 /*middle second level waves*/
 .middlewave2lightblue{
-    Top:530px; 
+    Top:625px; 
 }
 .middlewave2white{
-    Top:330px;
+    Top:630px;
     
 }
 .middlewave2{
@@ -340,7 +343,7 @@ overflow: auto;
 }
 
 .transitionlightblue{
-    top:531.6px;
+    top:1310px;
 }
 
 /*Viking Ship */
@@ -385,12 +388,8 @@ overflow: auto;
 /*light blue background on Main page*/
 .lightbluebackground{
     background-color:rgb(0, 168, 243);
-    height:300px;
+    height:132px;
 }
-
-
-
-
 
 
 /* Change styles for span and cancel button on extra small screens */
