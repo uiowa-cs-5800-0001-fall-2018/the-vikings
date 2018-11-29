@@ -233,6 +233,29 @@ var Project = Vue.extend({
                 }
             })
         },
+		
+		fork_it: function() {
+            json = {"id": this.project_id}
+            
+            this.$http.post('/fork_project', json, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.token
+                }
+            }).then(response => {
+				res = response.body;
+				if (res.status == "success") {
+					alert("forked, redirecting")
+					setTimeout(function() {
+                        router.push({ name: 'project', params: { project_id: res.pid }})
+                    }, 2000);
+					
+				} else {
+					alert("failed")
+				}
+
+            });	
+		},
         onWorkspaceChange: function() {
             var code = Blockly.JavaScript.workspaceToCode(this.workspace);
             this.js_code = code;
