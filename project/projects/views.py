@@ -8,16 +8,19 @@ import json
 def authorize(f):
 	@wraps(f)
 	def decorated_function(*args, **kws):
+		print('qweqweqwe')
 		if not 'Authorization' in request.headers:
 			abort(401)
 
 		auth_header = request.headers.get('Authorization')
 		if auth_header:
+			print('####')
 			try:
 				auth_token = auth_header.split(" ")[1]
 			except IndexError:
 				abort(401)
 		else:
+			print('###')
 			auth_token = ''
 
 		if auth_token:
@@ -53,6 +56,37 @@ def create_project(user):
 	db.session.commit() 
 	
 	return jsonify({"status": "success", "pid": project.id})
+
+
+@app.route('/fork_project', methods=['POST'])
+@authorize
+def fork_project(user):
+	post_data = request.get_json()
+	query_result = db.session.query(Project).filter(Project.id == post_data.get('id')).all()
+
+	if len(query_result) == 1:
+		info = {
+			"status": "success",
+			"name" : query_result[0].name,
+			"description" : query_result[0].description,
+			"xml": query_result[0].xml
+		}
+		project = Project(
+			owner=user['username'],
+			name='Fork of ' + query_result[0].name,
+			is_public=bool(query_result[0].is_public),
+			description=query_result[0].description,
+			xml=query_result[0].xml
+			#parent
+		)
+
+		db.session.add(project)
+		db.session.commit() 
+		
+		return jsonify({"status": "success", "pid": project.id})
+	else:
+		return jsonify({"status": "fail"})
+
 
 @app.route('/save_project', methods=['POST'])
 @authorize

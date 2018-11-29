@@ -465,9 +465,8 @@
                         <a class="item linkref" onclick="document.getElementById('id03').style.display='block'"><i class="file alternate icon"></i>New
                         Project</a>
                         <a class="item linkref" onclick="document.getElementById('id04').style.display='block'"><i class="play icon"></i></a>   
-                        <a href="#" class="item linkref"><i class="random icon"></i>Fork</a>
+                        <a v-on:click="fork_it()" class="item linkref"><i class="random icon"></i>Fork</a>
                         <a class="item linkref"> <i class="star outline icon"></i></a>
-
                         <div class="ui category search item">
                             <div class="ui icon input">
                                 <input class="prompt" type="text" placeholder="Search Projects...">
