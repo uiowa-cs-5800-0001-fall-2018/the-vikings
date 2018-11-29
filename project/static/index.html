@@ -327,9 +327,9 @@
                         <div class="results"></div>
 
                     </div>
-                    <a class="item" href="main_page.html">
+                    <router-link :to="{ name: 'project', params: { project_id: 1 }}"><a class="item">
                         Tutorial
-                    </a>
+                    </a></router-link>
                     <a class="item" id="signin" onclick="document.getElementById('id01').style.display='block'">
                         Sign in
                     </a>
@@ -344,10 +344,7 @@
             <h5 style="position:absolute; Top:200px; right:500px;left:800px;white-space: nowrap;">In a sea of code it
             is easy to get swept away...</h5>
             <h5 style="position:absolute; Top:210px; right:400px; left:850px;white-space: nowrap;">Don't get swept
-            away. Learn code with the Vikings!</h5>
-            Hello World! <br>
-            <router-link :to="{ name: 'project', params: { project_id: 1 }}">Sample Pen 1</router-link>
-            <router-link :to="{ name: 'project', params: { project_id: 2 }}">Sample Pen 2</router-link>  
+            away. Learn code with the Vikings!</h5> 
             <div class="topwave wavepropertiesblue"></div>
             <div class="middlewave2lightblue wavepropertieslightblue"></div>
             <div class="middlewave2white wavepropertieswhite"></div>
@@ -363,15 +360,22 @@
         </div>
 
         <div class="bluebackground">
+            <div style="position:absolute; top:900px;left:10px;color:white;">
+                <h2>Learn How to Code</h2>
+                <h3 style="text-indent: 30px;">    Make coding less difficult, learn with the Vikings. With todays need for computer
+                    <br> scientists, coding is in high demand. But to be able to code can prove to be difficult.
+                    <br>  Using blocks and code next to each other, coding becomes easier to see and 
+                    <br> understand. Further, with the help of Turtle, the ability to see how to code runs
+                    <br> helps those struggling to fully understand coding.</h3>
+
+            </div>
+            <img src ="semantic/assets/img/examplecoding.jpg" style="width:800px;position: absolute;top:900px;left:700px;">
             <div class="transitionlightblue wavepropertieslightblue"></div>
 
         </div>
         <div class="lightbluebackground">
-
         </div>
-
     </div>
-
 </div>
 </template>
 
