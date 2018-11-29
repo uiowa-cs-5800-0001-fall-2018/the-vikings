@@ -433,16 +433,19 @@
         </div>
 
         <!-- Play Modal -->
-        <div id="id04" class="modal">
-
-            <form class="modal-content animate" action="/action_page.php">
+        <div id="id04" class="ui basic modal">
+            <form class="modal-content animate">
+                
                 <div class="imgcontainer">
                     <span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal">&times;</span>
                 </div>
 
-                <div class="container">
-
-                </div>
+                <br>
+            <div class="container">
+                <center id="canvas-cont">
+                </center>
+            </div>
+            
             </form>
         </div>
 
@@ -464,7 +467,7 @@
                         <a class="item linkref" onclick="document.getElementById('id02').style.display='block'"><i class="address book outline icon"></i>Comment</a>
                         <a class="item linkref" onclick="document.getElementById('id03').style.display='block'"><i class="file alternate icon"></i>New
                         Project</a>
-                        <a class="item linkref" onclick="document.getElementById('id04').style.display='block'"><i class="play icon"></i></a>   
+                        <a class="item linkref" v-on:click="run_blocks()"><i class="play icon"></i></a>   
                         <a v-on:click="fork_it()" class="item linkref"><i class="random icon"></i>Fork</a>
                         <a class="item linkref"> <i class="star outline icon"></i></a>
                         <div class="ui category search item">
@@ -531,15 +534,64 @@
             <!--left side of the document for blockly-->
             <div class="split right">
                 <div id="blocklyDiv" ref="blocklyDiv" style="height: 480px; width: 600px;"></div>
-                <xml id="toolbox" ref="toolbox"  style="display: none">
-                    <block type="controls_if"></block>
-                    <block type="controls_repeat_ext"></block>
-                    <block type="logic_compare"></block>
-                    <block type="math_number"></block>
-                    <block type="math_arithmetic"></block>
-                    <block type="text"></block>
-                    <block type="text_print"></block>
-                </xml>
+                <xml id="toolbox" ref="toolbox" style="display: none">
+
+    <category name="Turtle">
+        <block type="initiate_drawing"></block>
+        <block type="move"><value name="VALUE"><block type="math_number"><title name="NUM">10</title></block></value></block>
+        <block type="turn"><value name="VALUE"><block type="math_number"><title name="NUM">90</title></block></value></block>
+        <block type="width"><value name="WIDTH"><block type="math_number"><title name="NUM">1</title></block></value></block>
+        <block type="setcolor"></block>
+    </category>
+    <category name="Control">
+        <block type="controls_if"></block>
+        <block type="controls_repeat"></block>
+        <block type="controls_whileUntil"></block>
+        <block type="controls_for"><value name="FROM"><block type="math_number"><title name="NUM">1</title></block></value><value name="TO"><block type="math_number"><title name="NUM">10</title></block></value></block>
+        <block type="controls_forEach"></block>
+        <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Logic">
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_negate"></block>
+        <block type="logic_boolean"></block>
+        <block type="logic_null"></block>
+        <block type="logic_ternary"></block>
+    </category>
+    <category name="Math">
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+        <block type="math_single"></block>
+        <block type="math_trig"></block>
+        <block type="math_constant"></block>
+        <block type="math_number_property"></block>
+        <block type="math_change"><value name="DELTA"><block type="math_number"><title name="NUM">1</title></block></value></block>
+        <block type="math_round"></block>
+        <block type="math_on_list"></block>
+        <block type="math_modulo"></block>
+        <block type="math_constrain"><value name="LOW"><block type="math_number"><title name="NUM">1</title></block></value><value name="HIGH"><block type="math_number"><title name="NUM">100</title></block></value></block>
+        <block type="math_random_int"><value name="FROM"><block type="math_number"><title name="NUM">1</title></block></value><value name="TO"><block type="math_number"><title name="NUM">100</title></block></value></block>
+        <block type="math_random_float"></block>
+    </category>
+    <category name="Lists">
+        <block type="lists_create_empty"></block>
+        <block type="lists_create_with"></block>
+        <block type="lists_repeat"><value name="NUM"><block type="math_number"><title name="NUM">5</title></block></value></block>
+        <block type="lists_length"></block>
+        <block type="lists_isEmpty"></block>
+        <block type="lists_indexOf"><value name="VALUE"><block type="variables_get"><title name="VAR">list</title></block></value></block>
+        <block type="lists_getIndex"><value name="VALUE"><block type="variables_get"><title name="VAR">list</title></block></value></block>
+        <block type="lists_setIndex"><value name="LIST"><block type="variables_get"><title name="VAR">list</title></block></value></block>
+        <block type="lists_getSublist"><value name="LIST"><block type="variables_get"><title name="VAR">list</title></block></value></block>
+    </category>
+    <category name="Variables" custom="VARIABLE">
+        
+    </category>
+    <category name="Procedures" custom="PROCEDURE">
+        
+    </category>
+</xml>
 
             </div>
             <!--choices-->
@@ -628,5 +680,7 @@
 <script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
 
 <script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.4.3/fabric.min.js"></script>
+<script src="blocks.js"></script>
 </body>
 </html>

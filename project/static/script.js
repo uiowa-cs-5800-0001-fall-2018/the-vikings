@@ -233,7 +233,26 @@ var Project = Vue.extend({
                 }
             })
         },
-		
+		run_blocks: function() {
+          document.getElementById('id04').style.display='block';
+            var code = this.js_code;
+            eval(code);
+            // console.log(code.split("//STEP"))
+            code = code.split("//STEP")
+
+            // var i = 0;
+            // function myLoop () {
+            //     eval(code[i]);
+            //    setTimeout(function () {
+            //       i++;                 
+            //       if (i < code.length) {
+            //          myLoop();          
+            //       }                     
+            //    }, 1000)
+            // }
+
+            // myLoop();
+        },
 		fork_it: function() {
             json = {"id": this.project_id}
             
