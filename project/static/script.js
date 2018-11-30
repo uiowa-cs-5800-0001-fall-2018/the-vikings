@@ -40,10 +40,30 @@ var Home = Vue.extend({
             },
             msg: "",
             status : "",
+            requester: ""
 
         }
     },
+    mounted: function() {
+        this.token = getCookie("token_vikings")
+        if (this.token) {
+            this.$http.get('/auth/status', {
+                headers: {
+                    'Authorization': this.token
+                }
+            }).then(response => {
+                this.requester = response.body.data;
+                console.log(this.requester, "qweqwe");
+            })
+        }
+        
+    },
     methods: {
+        logout: function() {
+            eraseCookie('token_vikings');
+            alert("logged out!");
+            router.go({ name: 'home'})
+        },
         logInUser: function() {
             var login = this.login;
             console.log(login);
@@ -92,7 +112,7 @@ var Home = Vue.extend({
                     this.status = body.status
                     if (body.status == "success") {
                         this.msg = "Successfully registered and logged in, directing to your homepage."
-                        setCookie('token_vikings', 'Authorization: Bearer '+body.auth_token, 365);
+                        setCookie('token_vikings', 'Bearer '+body.auth_token, 365);
                         setTimeout(function() {
                             router.push({ name: 'profile', params: { username: json.username }})
                         }, 3000);
@@ -118,7 +138,7 @@ var Profile = Vue.extend({
         return {
             username: this.$route.params.username,
             token: "",
-            requester: {username: null},
+            requester: {username: ""},
             project: {},
             msg: null,
             status: null,
@@ -149,6 +169,11 @@ var Profile = Vue.extend({
         
     },
     methods: {
+        logout: function() {
+            eraseCookie('token_vikings');
+            alert("logged out!");
+            router.go({ name: 'home'})
+        },
         createProject: function() {
             if (this.project.is_public) {
                 is_public = 1
@@ -180,6 +205,13 @@ var Profile = Vue.extend({
     }
 })
 
+var Redirect = Vue.extend({
+    mounted: function() {
+        var id = this.$route.params.id;
+        router.push({ path: `/project/${id}` })
+    }
+});
+
 var Project = Vue.extend({
     template: '#project',
     data: function() {
@@ -190,6 +222,9 @@ var Project = Vue.extend({
             workspace: null,
             requester: {"username": null},
             token: null,
+            is_justblockly: false,
+            is_justcode: false,
+            saveas: {"name":"","desc":""}
         }
     },
     mounted: function() {
@@ -208,6 +243,7 @@ var Project = Vue.extend({
                 this.requester = response.body.data;
             })
         }
+        this.run();
     },
     created: function() {
         this.run();
@@ -233,6 +269,82 @@ var Project = Vue.extend({
                 }
             })
         },
+        saveAs: function() {
+            var saveas = this.saveas;
+            var json = {
+                        "desc": saveas.desc,
+                        "name": saveas.name,
+                        "id": this.project_id
+                        }
+            console.log(saveas.desc, saveas.name, this.project_id);
+            this.$http.post('/saveas_project', json, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.token
+                }
+            }).then(response => {
+                res = response.body;
+                if (res.status == "success") {
+                    alert("saved, redirecting")
+                    router.push({ path: `/redirect/${res.pid}` })
+
+                    
+                } else {
+                    alert("failed")
+                }
+
+            }); 
+            
+        },
+        justblockly: function() {
+            if (this.is_justcode) {
+                this.un_justcode();
+            }
+            $("#rightside").removeClass("split");
+            $("#rightside").removeClass("left");
+            $("#rightside").hide();
+            // $("#leftside").css('width', '100%');
+            $("#leftside").css('width', '100%');
+            Blockly.svgResize(this.workspace);
+            this.is_justblockly = true;
+        },
+        un_justblockly: function() {
+            if (this.is_justcode) {
+                this.un_justcode();
+            }
+            // $("#leftside").css('width', '50%');
+            $("#leftside").css('width', '50%');
+            $("#rightside").addClass("split left");
+            $("#rightside").show();
+            Blockly.svgResize(this.workspace);
+            this.is_justblockly = false;
+        },
+        justcode: function(){
+            if (this.is_justblockly) {
+                this.un_justblockly();
+            }
+            $("#leftside").removeClass("split");
+            $("#leftside").removeClass("right");
+            $("#leftside").hide();
+            $("#rightside").css('width', '100%');
+            Blockly.svgResize(this.workspace);
+            this.is_justcode = true;
+        },
+        un_justcode: function(){
+            if (this.is_justblockly) {
+                this.un_justblockly();
+            }
+            $("#rightside").css('width', '50%');
+            $("#leftside").addClass("split right");
+            $("#leftside").show();
+            Blockly.svgResize(this.workspace);
+            this.is_justcode = false;
+        },
+        logout: function() {
+            eraseCookie('token_vikings');
+            alert("logged out!");
+            router.go({ name: 'home'})
+        },
 		run_blocks: function() {
           document.getElementById('id04').style.display='block';
             var code = this.js_code;
@@ -240,18 +352,6 @@ var Project = Vue.extend({
             // console.log(code.split("//STEP"))
             code = code.split("//STEP")
 
-            // var i = 0;
-            // function myLoop () {
-            //     eval(code[i]);
-            //    setTimeout(function () {
-            //       i++;                 
-            //       if (i < code.length) {
-            //          myLoop();          
-            //       }                     
-            //    }, 1000)
-            // }
-
-            // myLoop();
         },
 		fork_it: function() {
             json = {"id": this.project_id}
@@ -265,9 +365,7 @@ var Project = Vue.extend({
 				res = response.body;
 				if (res.status == "success") {
 					alert("forked, redirecting")
-					setTimeout(function() {
-                        router.push({ name: 'project', params: { project_id: res.pid }})
-                    }, 2000);
+                    router.push({ path: `/redirect/${res.pid}` });
 					
 				} else {
 					alert("failed")
@@ -321,6 +419,11 @@ const router = new VueRouter({
             component: Profile,
             name: 'profile'
         },
+        {
+            path: '/redirect/:id',
+            component: Redirect,
+            name: 'redirect'
+        }
     ]
 });
 

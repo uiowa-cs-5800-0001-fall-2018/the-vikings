@@ -102,6 +102,29 @@ def save_project(user):
 
 	return jsonify({"status": "fail"})
 
+@app.route('/saveas_project', methods=['POST'])
+@authorize
+def saveas_project(user):
+	post_data = request.get_json()
+	query_result = db.session.query(Project).filter(Project.id == post_data.get('id')).all()
+
+	if len(query_result) == 1:
+		project = Project(
+			owner=user['username'],
+			name= post_data.get('name'),
+			is_public=bool(query_result[0].is_public),
+			description=post_data.get('desc'),
+			xml=query_result[0].xml
+		)
+
+		db.session.add(project)
+		db.session.commit()
+		
+		return jsonify({"status": "success", "pid": project.id})
+	else:
+		return jsonify({"status": "fail"})
+
+
 @app.route("/projects/<project_id>")
 def project_data(project_id):
 	content = get_project(int(project_id))
