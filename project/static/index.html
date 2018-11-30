@@ -81,9 +81,13 @@
                                     </div>
                                     <div class="results"></div>
                                 </div>
-                                <a class="item" href="Home_page.html">
-                                    Sign out
+                                <router-link class="item" :to="{ name: 'home'}">
+                                    Home
+                                </router-link>
+                                <a  v-if="requester.username!=''"  class="item" id="registermod" v-on:click="logout()">
+                                    Logout
                                 </a>
+
                             </div>
                         </div>
                     </div>
@@ -254,7 +258,7 @@
             <!--The Register Modal-->
             <div id="id02" class="modal register">
 
-                <form class="modal-content animate" action="/action_page.php">
+                <div class="modal-content animate">
                     <div class="imgcontainer">
                         <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
                         <img src="semantic/assets/img/Helmet Cutout.png" alt="Avatar" class="avatar">
@@ -305,7 +309,7 @@
             <div class="container" style="background-color:#f1f1f1">
                 <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
             </div>
-        </form>
+        </div>
     </div>
 
 
@@ -330,12 +334,16 @@
                     <router-link :to="{ name: 'project', params: { project_id: 1 }}"><a class="item">
                         Tutorial
                     </a></router-link>
-                    <a class="item" id="signin" onclick="document.getElementById('id01').style.display='block'">
+                    <a  v-if="requester==''" class="item" id="signin" onclick="document.getElementById('id01').style.display='block'">
                         Sign in
                     </a>
-                    <a class="item" id="registermod" onclick="document.getElementById('id02').style.display='block'">
+                    <a  v-if="requester==''"  class="item" id="registermod" onclick="document.getElementById('id02').style.display='block'">
                         Register
                     </a>
+                    <a  v-if="requester!=''"  class="item" id="registermod" v-on:click="logout()">
+                        Logout
+                    </a>
+                    <router-link v-if="requester!=''"  class="item" :to="{ name: 'profile', params: { 'username':  requester.username}}">My Profile</router-link> 
                 </div>
             </div>
         </div>
@@ -384,17 +392,20 @@
         <!-- The Save as Modal -->
         <div id="id01" class="modal">
 
-            <form class="modal-content animate" action="/action_page.php">
+            <form class="modal-content animate" v-on:submit.prevent="saveAs">
                 <div class="imgcontainer">
                     <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
                 </div>
 
                 <div class="container">
                     <label for="filename"><b>File Name</b></label>
-                    <input type="text" placeholder="Enter File Name" name="Saveasfilename" required>
+                    <input type="text" placeholder="Enter Name" name="saveasname" v-model="saveas.name" required>
+                    
 
                     <label for="aboutfile"><b>Write a Description</b></label>
-                    <input type="text" placeholder="Write Description About Code" name="aboutcode" rows=20>
+                  
+                   <br>
+                   <textarea rows="3" placeholder="Enter Description" name="saveasdesc" v-model="saveas.desc"></textarea>
 
                     <button type="save">Save</button>
                 </div>
@@ -463,14 +474,16 @@
                     </div>
                     <router-link :to="{ name: 'profile', params: { 'username':  requester.username}}" class="item linkref"><i class="home icon"></i>Home</router-link>
 
-                    <a href="Just_blockly.html" class="item linkref">Just Blockly</a>
-                    <a href="Just_code.html" class="item linkref">Just Code</a>
+                    <a v-if="is_justblockly==false" class="item linkref" v-on:click="justblockly()">Just Blockly</a>
+                     <a v-if="is_justblockly==true" class="item linkref" v-on:click="un_justblockly()"> Double-view</a>
+                    <a v-if="is_justcode==false" class="item linkref" v-on:click="justcode()">Just Code</a>
+                    <a v-if="is_justcode==true" class="item linkref" v-on:click="un_justcode()">Double-view</a>
                     <a class="item linkref" v-on:click="save()"><i class="save icon"></i>Save</a>
-                    <a href="#" class="item linkref" onclick="document.getElementById('id01').style.display='block'"><i
+                    <a class="item linkref" onclick="document.getElementById('id01').style.display='block'"><i
                         class="pencil alternate icon"></i>Save As</a>
                         <a class="item linkref" onclick="document.getElementById('id02').style.display='block'"><i class="address book outline icon"></i>Comment</a>
-                        <a class="item linkref" onclick="document.getElementById('id03').style.display='block'"><i class="file alternate icon"></i>New
-                        Project</a>
+                        <!-- <a class="item linkref" onclick="document.getElementById('id03').style.display='block'"><i class="file alternate icon"></i>New
+                        Project</a> -->
                         <a class="item linkref" v-on:click="run_blocks()"><i class="play icon"></i></a>   
                         <a v-on:click="fork_it()" class="item linkref"><i class="random icon"></i>Fork</a>
                         <a class="item linkref"> <i class="star outline icon"></i></a>
@@ -528,7 +541,7 @@
                 </div>
             </div>
             <!--Right side of the document for code-->
-            <div class="split left">
+            <div id="rightside" class="split left">
                 <div class="form infront">
                     <div class="field"></div>
                     <textarea rows="42">{{js_code}}</textarea>
@@ -536,8 +549,8 @@
             </div>
 
             <!--left side of the document for blockly-->
-            <div class="split right">
-                <div id="blocklyDiv" ref="blocklyDiv" style="height: 480px; width: 600px;"></div>
+            <div id="leftside" class="split right">
+                <div id="blocklyDiv" ref="blocklyDiv" style="height: 100%; width:100%;"></div>
                 <xml id="toolbox" ref="toolbox" style="display: none">
 
     <category name="Turtle">
