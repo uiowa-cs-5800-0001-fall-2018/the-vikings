@@ -125,10 +125,11 @@ class Project(BaseModel, db.Model):
     owner = db.Column(db.String(), nullable=False)
     xml = db.Column(db.String())
     name = db.Column(db.String(256), nullable=False)
-    description =db.Column(db.String())
+    description = db.Column(db.String())
     is_public = db.Column(db.Boolean, default=False)
     last_modified = db.Column(db.DateTime, nullable=False)
     num_stars = db.Column(db.Integer, default=False)
+    parent = db.Column(db.Integer)
 
     def __init__(self,
                  owner,
@@ -136,6 +137,7 @@ class Project(BaseModel, db.Model):
                  is_public,
                  description="",
                  xml="",
+                 parent=None
                  ):
         self.owner = owner
         self.description = description
@@ -144,3 +146,4 @@ class Project(BaseModel, db.Model):
         self.name = name
         self.last_modified = datetime.datetime.now()
         self.num_stars = 0
+        self.parent = parent
