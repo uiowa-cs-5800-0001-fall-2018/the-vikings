@@ -49,7 +49,8 @@ def create_project(user):
 		owner=user['username'],
 		name=post_data.get('name'),
 		is_public=bool(post_data.get('is_public')),
-		description=post_data.get('description')
+		description=post_data.get('description'),
+		parent=None
 	)
 
 	db.session.add(project)
@@ -76,8 +77,8 @@ def fork_project(user):
 			name='Fork of ' + query_result[0].name,
 			is_public=bool(query_result[0].is_public),
 			description=query_result[0].description,
-			xml=query_result[0].xml
-			#parent
+			xml=query_result[0].xml,
+            parent=post_data.get('id')
 		)
 
 		db.session.add(project)
@@ -114,7 +115,9 @@ def saveas_project(user):
 			name= post_data.get('name'),
 			is_public=bool(query_result[0].is_public),
 			description=post_data.get('desc'),
-			xml=query_result[0].xml
+			xml=query_result[0].xml,
+			parent=query_result[0].parent
+			
 		)
 
 		db.session.add(project)
