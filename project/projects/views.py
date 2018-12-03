@@ -116,7 +116,7 @@ def saveas_project(user):
 			is_public=bool(query_result[0].is_public),
 			description=post_data.get('desc'),
 			xml=query_result[0].xml,
-			parent=query_result[0].parent
+			parent=None
 			
 		)
 
@@ -150,7 +150,8 @@ def get_project(project_id: int) -> json:
 			"status": "success",
 			"name" : query_result[0].name,
 			"description" : query_result[0].description,
-			"xml": query_result[0].xml
+			"xml": query_result[0].xml,
+			"parent": query_result[0].parent
 		}
 		return json.dumps(info)
 
@@ -170,7 +171,8 @@ def get_projects(owner):
 			"xml": res.xml,
 			"owner": res.owner,
 			"datetime": str(res.last_modified),
-			"num_stars": res.num_stars
+			"num_stars": res.num_stars,
+			"parent": res.parent
 		}
 		respond.append(info)
 
