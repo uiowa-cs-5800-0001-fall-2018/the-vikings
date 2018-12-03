@@ -146,6 +146,7 @@ var Profile = Vue.extend({
             status: null,
             private_projects: [],
             public_projects: [],
+            starred_projects: [],
             query: "",
 
         }
@@ -184,6 +185,20 @@ var Profile = Vue.extend({
                 this.private_projects = res["data"]
             } else {
                 this.private_projects = [];
+            }
+        })
+
+        this.$http.get('/starredprojects/' + this.username, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            res = response.body
+            console.log(res)
+            if (response.body.status == "success") {
+                this.starred_projects = res["data"]
+            } else {
+                this.starred_projects = [];
             }
         })
 
@@ -306,6 +321,7 @@ var Project = Vue.extend({
             searchResults: [],
             parents: [],
             children: [],
+            starred: false,
         }
     },
     mounted: function() {
@@ -324,9 +340,29 @@ var Project = Vue.extend({
             }).then(response => {
                 this.requester = response.body.data;
                 console.log(this.requester.username)
+
+                json = {"uid": this.requester.user_id, "pid": this.project_id}
+                console.log(json)
+                this.$http.post('/isstarred', json, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': this.token
+                    }
+                }).then(response => {
+                    res = response.body;
+                    if (res.status=="yes") {
+                        console.log(res.status)
+                        this.starred=true
+                        console.log(this.starred)
+                    }
+                });
+                this.run();
+
             })
         }
-        this.run();
+
+        //check if starred
+
     },
     methods: {
         run: function() {
@@ -352,6 +388,40 @@ var Project = Vue.extend({
                     this.content = 'error'
                 }
             })
+        },
+        starthis: function() {
+            json = {"uid": this.requester.user_id, "pid": this.project_id}
+            console.log(json)
+            this.$http.post('/stars', json, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.token
+                }
+            }).then(response => {
+                res = response.body;
+                if (res.status=="success") {
+                    this.starred=true
+                    console.log("starred")
+                }
+            });
+        },
+        unstarthis: function() {
+            json = {"uid": this.requester.user_id, "pid": this.project_id}
+            console.log(json)
+            this.$http.post('/unstars', json, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.token
+                }
+            }).then(response => {
+                res = response.body;
+                console.log(res)
+                if (res.status=="success") {
+                    this.starred=false
+                    console.log("unstarred")
+                }
+
+            });
         },
         search: function() {
             this.$http.post('/search', { "query": this.query }, {
