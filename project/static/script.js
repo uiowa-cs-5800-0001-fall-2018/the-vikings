@@ -142,7 +142,8 @@ var Profile = Vue.extend({
             project: {},
             msg: null,
             status: null,
-            projects: []
+            owner_projects: [],
+            public_projects: []
         }
     },
     mounted: function() {
@@ -161,8 +162,13 @@ var Profile = Vue.extend({
                 'Content-Type': 'application/json',
             }
         }).then(response => {
-            if (response.body.status == "success") {
-                this.projects = response.body.data
+            console.log(response.body.public)
+            var done = JSON.parse(response.body.owner)
+            var p_done = response.body.public
+            if (done.status == "success") {
+                this.owner_projects = done.data
+                this.public_projects = p_done.data
+                console.log(this.public_projects)
             }
         })
 
@@ -400,6 +406,8 @@ var Project = Vue.extend({
             });
         }
     }
+})
+var OtherProject = Vue.extend({ 
 })
 
 
