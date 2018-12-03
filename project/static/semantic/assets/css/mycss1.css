@@ -87,191 +87,15 @@ overflow: auto;
     width:1519px;
     background: linear-gradient(to top, rgba(0, 204, 255, 0), rgb(0, 204, 255)); /* Standard syntax (must be last) */
     padding-top:0px;
-    z-index:1;
-}
-#grad.user {
-    height:1950px;
-    width:100%;
-    background: linear-gradient(to top, rgba(0, 204, 255, 0), rgb(0, 204, 255)); /* Standard syntax (must be last) */
-    padding-top:0px;
-    z-index:1;
-    min-width:1300px;
-}
-/*For other projects and my projects page*/
-#grad.otherpeople{
-    height:230%;
-    width:100%;
-    background: linear-gradient(to top, rgba(0, 204, 255, 0), rgb(0, 204, 255)); /* Standard syntax (must be last) */
-    padding-top:0px;
-    z-index:1;
-    min-width:1300px;
-}
-#grad.otherprojects{
-    min-height:100%;
-    min-width:100%;
-    width:100%;
-    height:auto;
-    background: linear-gradient(to top,rgb(0, 204, 255),rgb(79, 81, 226), rgb(0, 204, 255)); /* Standard syntax (must be last) */
-    background-repeat: repeat;
-    padding-top:0px;
-    z-index:1;
-    min-width:1300px;
-}
-
-/*Side navigation for blocks*/
-
-/* Style the links inside the sidenav */
-#mySidenav button{
-    position: fixed; /* Position them relative to the browser window */
-    left: -120px; /* Position them outside of the screen */
-    transition: 0.3s; /* Add transition on hover */
-    padding: 15px; /* 15px padding */
-    width: 200px; /* Set a specific width */
-    text-decoration: none; /* Remove underline */
-    font-size: 20px; /* Increase font size */
-    text-align: left;
-    color: white; /* White text color */
-    border-radius: 0 10px 10px 0; /* Rounded corners on the top right and bottom right side */
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-}
-
-#mySidenav button:hover {
-    left: 0; /* On mouse-over, make the elements appear as they should */
-    border-radius: 0 0 0 0;
-    color: rgb(90, 83, 83);
-    cursor: pointer;
-    padding: 15px;
-    width: 140px;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 20px;
-    transition: 0.5s;
-    border-radius: 0 10px 10px 0; /* Rounded corners on the top right and bottom right side */
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-}
-
-/* The about link: 20px from the top with a green background */
-#about.aboutchoices {
-    top: 80px;
-}
-
-#blog.blogchoices {
-    top: 140px;
-}
-
-#projects.projectschoices {
-    top: 200px;
-}
-
-#contact.contactchoices {
-    top: 260px;
-}
-
-#lists.listschoices {
-    top: 320px;
-}
-
-#Colorc.Colorchoices {
-    top: 380px;
-}
-
-#Variables.Variableschoices{
-    top: 440px;
-}
-
-#Functions.Functionschoices{
-    top: 500px;
-}
-
-.unstyled-button{
-    border: none;
-    padding: 0;
-    background: none;
-}
-
-/* specific choices about */
-.aboutchoices {
-    background-color: #4CAF50;
-}
-
-.blogchoices {
-    background-color: #2196F3;
-}
-
-.projectschoices {
-    background-color: #f44336;
-}
-
-.contactchoices {
-    background-color: rgb(252, 248, 21);
-}
-
-.listschoices {
-    background-color: #75cc90;
-}
-
-.Colorchoices {
-    background-color: magenta;
-}
-
-.Variableschoices {
-    background-color: orange;
-}
-
-.Functionschoices {
-    background-color: navy;
-}
-
-.expandedbox{
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 60px;
-    left: 0;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-    border-radius: 0 10px 10px 0; /* Rounded corners on the top right and bottom right side */
-}
-
-.choices a {
-    padding: 8px 8px 8px 10px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
-}
-.choices a:hover {
-    color: #f1f1f1;
-}
-.choices .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-}
-.choices.expandedbox img{
-    padding-left:10px;
-}
-    
-@media screen and (max-height: 450px) {
-  .choices {padding-top: 10px; }
-  .choices a {font-size: 18px;}
+    z-index:2;
 }
 
 .vikinganimation{
     background: linear-gradient(to bottom, rgba(66, 66, 66, 0), rgb(79, 81, 226));
     height:680px;
+    z-index: 2;
 }
 
-.vikinganimationuser{
-    /*background: linear-gradient(to bottom, rgba(66, 66, 66, 0), rgb(79, 81, 226));*/
-    height:100%;
-}
 
 /*For viking animation on home page */
 /*Waves at bottom properties*/
@@ -288,17 +112,18 @@ overflow: auto;
     background-repeat: repeat-x;
     position:absolute; 
     height:200px; 
-    width:100%; 
+    width:110%; 
     background-size: 240px 70px;
     background-image:url(../../../semantic/assets/img/Whitewave.png);
     left:-160px;
+    
 }
 .wavepropertieslightblue{
     background-image:url(../../../semantic/assets/img/LightBluewave.png);
     background-repeat: repeat-x;
     position:absolute; 
     height:200px; 
-    width:100%; 
+    width:105.25%; 
     background-size: 240px 70px;
     left:-80px;
 }
