@@ -436,6 +436,15 @@ var Project = Vue.extend({
             })
 
         },
+        downloadimage: function(){
+
+        var download = document.getElementById("download");
+        var image = document.getElementById("myCanvas").toDataURL("image/png")
+                    .replace("image/png", "image/octet-stream");
+              download.setAttribute("href", image);
+              
+
+        },
         starthis: function() {
             json = {"uid": this.requester.user_id, "pid": this.project_id}
             console.log(json)
