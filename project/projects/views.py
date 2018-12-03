@@ -203,7 +203,7 @@ def children(project_id):
 def project_data(project_id):
 	content = get_project(int(project_id))
 
-	return content
+	return jsonify(content)
 
 # @app.route("/user/<owner>")
 # def projects_data(owner):
@@ -298,29 +298,98 @@ def data_project(project_id):
 
 	return content
 
-@app.route("/stars/<project_id>/<user_id>")
+@app.route("/stars", methods=['POST'])
 @authorize
-def stars_data(u, user_id,project_id):
-	star_it(int(user_id), int(project_id))
+def stars_data(user):
+	try:
+		post_data = request.get_json()
+		user_id = post_data.get("uid")
+		project_id = post_data.get("pid")
+		star_it(int(user_id), int(project_id))
 
-	return "1"
+		return jsonify({"status":"success"})
+	except:
+		return jsonify({"status":"fail"})
+
+@app.route("/unstars", methods=['POST'])
+@authorize
+def unstars_data(user):
+	try:
+		post_data = request.get_json()
+		user_id = post_data.get("uid")
+		project_id = post_data.get("pid")
+		unstar_it(int(user_id), int(project_id))
+
+		return jsonify({"status":"success"})
+	except:
+		return jsonify({"status":"fail"})
 
 
-def star_it(user_id: int, project_id: int) -> json:
+@app.route("/isstarred", methods=['POST'])
+@authorize
+def is_starred(user):
+	try:
+		post_data = request.get_json()
+		user_id = post_data.get("uid")
+		project_id = post_data.get("pid")
+		query_result = db.session.query(Stars).filter(Stars.project_id == project_id, Stars.user_id==user_id).first()
+		
+		return jsonify({"status":"yes"})
+	except:
+		return jsonify({"status":"no"})
+
+@app.route("/starredprojects/<owner>")
+def starredprojects(owner):
+
+	query_result = db.session.query(User).filter(User.username == owner).first()
+	uid = query_result.id
+	
+	query_result = db.session.query(Stars).filter(Stars.user_id == uid).all()
+	respond = []
+	for res in query_result:
+		respond.append(res.project_id)
+
+	query_result = db.session.query(Project).filter(Project.id.in_(respond)).all()
+
+	respond = []
+	for res in query_result:
+		info = {
+			"id": res.id,
+			"name" : res.name,
+			"description" : res.description,
+			"xml": res.xml,
+			"owner": res.owner,
+			"datetime": str(res.last_modified),
+			"num_stars": res.num_stars,
+			"parent": res.parent
+		}
+		respond.append(info)
+	
+	return jsonify({"status": "success", "data": respond})
+		
+	
+
+
+def star_it(user_id: int, project_id: int):
 	"""
  	    :param project_id:
 	    :return:
 	    """
-	# try:
 	query_result = db.session.query(Project).filter(Project.id == project_id).all()
 	query_result[0].num_stars = int(query_result[0].num_stars)+1
-	print(query_result[0].name)
+	
 	stars_row = Stars(project_id=project_id, user_id=user_id)
 	db.session.add(stars_row)
 	db.session.flush()
 	db.session.commit()
-	# except:
-	# 	db.session.rollback()
-	# 	raise Exception("Could not star")
-	# finally:
-	# 	db.session.close() 
+
+def unstar_it(user_id: int, project_id: int):
+	"""
+ 	    :param project_id:
+	    :return:
+	    """
+	query_result = db.session.query(Project).filter(Project.id == project_id).all()
+	query_result[0].num_stars = int(query_result[0].num_stars)-1
+	
+	db.session.query(Stars).filter(Stars.project_id==project_id, Stars.user_id==user_id).delete()
+	db.session.commit()

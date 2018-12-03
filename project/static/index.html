@@ -141,8 +141,8 @@
                         <br>
                         
                         
-                        <h2>Public Projects!</h2>
-                        <div class="ui link cards">
+                        <h2 v-if="public_projects.length > 0">Public Projects!</h2>
+                        <div v-if="public_projects.length > 0" class="ui link cards">
 
 
                             <div  v-for="project_ in public_projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
@@ -184,8 +184,42 @@
                                 <div class="content">
                                     <center>
                                         <div class="header">
-                                            <router-link :to="{ name: 'project', params: { 'project_id': project_.id }}">{{project_.name}}</router-link><a><i class="star outline icon"
-                                            style="float:right;"></i></a>
+                                            <router-link :to="{ name: 'project', params: { 'project_id': project_.id }}">{{project_.name}}</router-link><!-- <a><i class="star outline icon"
+                                            style="float:right;"></i></a> -->
+                                        </div>
+                                        <div class="meta">
+                                            <a href="User_page.html"> Created by: {{project_.owner}}</a>
+                                        </div>
+                                        <a v-if="project_.owner==requester.username" v-on:click="removeProject(project_.id, project_.name)">Remove</a>
+                                    </center>
+                                    <div class="description">
+                                        {{project_.description}}
+                                    </div>
+                                </div>
+                                <div class="extra content">
+                                    <span class="right floated">
+                                        {{project_.datetime}}
+                                    </span>
+                                    <span>
+                                        {{project_.num_stars}} stars
+                                    </span>
+                                </div>
+                                <button class="ui yellow bottom attached button">
+                                    <i class="random icon"></i>
+                                    Forked Projects
+                                </button>
+                            </div>
+                        </div>
+
+                        <h2 v-if="starred_projects.length > 0"> Starred Projects</h2>
+                        <div v-if="starred_projects.length > 0" class="ui link cards">
+
+                            <div  v-for="project_ in starred_projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
+                                <div class="content">
+                                    <center>
+                                        <div class="header">
+                                            <router-link :to="{ name: 'project', params: { 'project_id': project_.id }}">{{project_.name}}</router-link><!-- <a><i class="star outline icon"
+                                            style="float:right;"></i></a> -->
                                         </div>
                                         <div class="meta">
                                             <a href="User_page.html"> Created by: {{project_.owner}}</a>
@@ -490,7 +524,8 @@
                             <a v-on:click="fork_it()" class="item linkref"><i class="random icon"></i>Fork</a>
                             <a class="item linkref" v-if="owner==requester.username"  onclick="document.getElementById('id05').style.display='block'"><i
                         class="pencil alternate icon"></i>Compare</a>
-                            <a class="item linkref"> <i class="star outline icon"></i></a>
+                            <a style="color:#F9A602;" v-if="requester && starred" class="item linkref" v-on:click="unstarthis()"> <i class="star icon"></i></a>
+                            <a v-if="requester && !starred" class="item linkref" v-on:click="starthis()"> <i class="star outline icon"></i></a>
                             <div class="ui category search item">
                                 <div class="ui icon input">
                                     <input class="prompt" id="searchbox" v-model="query" v-on:input="search" type="text" placeholder="Search Projects...">
