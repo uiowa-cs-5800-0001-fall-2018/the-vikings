@@ -59,7 +59,7 @@ def create_project(user):
 def search():
 	post_data = request.get_json()
 	q = post_data.get("query")
-	projects = db.session.query(Project).filter(Project.name.like("%{0}%".format(q)))
+	projects = db.session.query(Project).filter(Project.name.like("%{0}%".format(q))).filter(Project.is_public==True)
 	users = db.session.query(User).filter(User.username.like("%{0}%".format(q)))
 	response = {"projects":[], "users":[]}
 
@@ -353,6 +353,7 @@ def starredprojects(owner):
 
 	respond = []
 	for res in query_result:
+
 		info = {
 			"id": res.id,
 			"name" : res.name,
