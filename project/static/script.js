@@ -144,7 +144,7 @@ var Profile = Vue.extend({
             project: {},
             msg: null,
             status: null,
-            owner_projects: [],
+            private_projects: [],
             public_projects: [],
             query: "",
 
@@ -161,18 +161,29 @@ var Profile = Vue.extend({
                 this.requester = response.body.data;
             })
         }
-        this.$http.get('/user/' + this.username, {
+
+        this.$http.get('/public/' + this.username, {
             headers: {
                 'Content-Type': 'application/json',
             }
         }).then(response => {
-            console.log(response.body.public)
-            var done = JSON.parse(response.body.owner)
-            var p_done = response.body.public
-            if (done.status == "success") {
-                this.owner_projects = done.data
-                this.public_projects = p_done.data
-                console.log(this.public_projects)
+            res = response.body
+            if (response.body.status == "success") {
+                this.public_projects = res["data"]
+            }
+        })
+
+        this.$http.get('/private/' + this.username, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': this.token
+            }
+        }).then(response => {
+            res = response.body
+            if (response.body.status == "success") {
+                this.private_projects = res["data"]
+            } else {
+                this.private_projects = [];
             }
         })
 

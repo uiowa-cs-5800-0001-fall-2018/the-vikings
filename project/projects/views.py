@@ -1,4 +1,4 @@
-from project.models import Project, User
+from project.models import Project, User, Stars
 from project import bcrypt, db, app
 from functools import wraps
 from flask import abort, request, jsonify
@@ -205,9 +205,9 @@ def project_data(project_id):
 
 	return content
 
-@app.route("/user/<owner>")
-def projects_data(owner):
-	return json.dumps({"owner": get_projects(owner), "public": get_public_projects(owner)})
+# @app.route("/user/<owner>")
+# def projects_data(owner):
+# 	return json.dumps({"owner": get_projects(owner), "public": get_public_projects(owner)})
 
 def get_project(project_id: int) -> json:
 	"""
@@ -232,9 +232,37 @@ def get_project(project_id: int) -> json:
 
 	return "foo"
 
+@app.route("/private/<owner>")
+@authorize
+def get_private_projects(user, owner):
+	if user['username'] == owner:
+		query_result = db.session.query(Project).filter(Project.is_public != True, Project.owner == owner).order_by(Project.last_modified).all()
 
-def get_projects(owner):
-	query_result = db.session.query(Project).filter(Project.owner == owner).order_by(Project.last_modified).all()
+		respond = []
+		for res in query_result:
+			info = {
+				"id": res.id,
+				"name" : res.name,
+				"description" : res.description,
+				"xml": res.xml,
+				"owner": res.owner,
+				"datetime": str(res.last_modified),
+				"num_stars": res.num_stars,
+				"parent": res.parent
+			}
+			respond.append(info)
+
+		
+		respond.reverse()
+		respond = {"status":"success", "data": respond}
+
+		return json.dumps(respond)
+	else:
+		return jsonify({"status":"fail", "data": []})
+
+@app.route("/public/<owner>")
+def get_public_projects(owner):
+	query_result = db.session.query(Project).filter(Project.is_public == True, Project.owner == owner).order_by(Project.last_modified).all()
 
 	respond = []
 	for res in query_result:
@@ -250,33 +278,8 @@ def get_projects(owner):
 		}
 		respond.append(info)
 
-	
-	respond.reverse()
-	respond = {"status":"success", "data": respond}
 
-	return json.dumps(respond)
-
-def get_public_projects(owner):
-	query_result = db.session.query(Project).filter(Project.is_public == True, Project.owner != owner).all()
-
-	respond = []
-	for res in query_result:
-		info = {
-			"id": res.id,
-			"name" : res.name,
-			"description" : res.description,
-			"xml": res.xml,
-			"owner": res.owner,
-			"datetime": str(res.last_modified),
-			"num_stars": res.num_stars
-		}
-		respond.append(info)
-
-	
-	respond.reverse()
-	respond = {"status":"success", "data": respond}
-
-	return respond
+	return jsonify({"status":"success", "data": respond})
 
 
 def save_project_helper(p_id, content, submitter):
@@ -289,3 +292,35 @@ def save_project_helper(p_id, content, submitter):
 
 	return False
 
+@app.route("/projects/<project_id>")
+def data_project(project_id):
+	content = db_connections.get_project(int(project_id))
+
+	return content
+
+@app.route("/stars/<project_id>/<user_id>")
+@authorize
+def stars_data(u, user_id,project_id):
+	star_it(int(user_id), int(project_id))
+
+	return "1"
+
+
+def star_it(user_id: int, project_id: int) -> json:
+	"""
+ 	    :param project_id:
+	    :return:
+	    """
+	# try:
+	query_result = db.session.query(Project).filter(Project.id == project_id).all()
+	query_result[0].num_stars = int(query_result[0].num_stars)+1
+	print(query_result[0].name)
+	stars_row = Stars(project_id=project_id, user_id=user_id)
+	db.session.add(stars_row)
+	db.session.flush()
+	db.session.commit()
+	# except:
+	# 	db.session.rollback()
+	# 	raise Exception("Could not star")
+	# finally:
+	# 	db.session.close() 

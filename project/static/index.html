@@ -139,11 +139,13 @@
                             <h2 v-if="username===requester.username">My Projects!</h2>
                         </center>
                         <br>
-                        <h2 v-if="username==requester.username">Your Projects!</h2>
+                        
+                        
+                        <h2>Public Projects!</h2>
                         <div class="ui link cards">
 
 
-                            <div  v-for="project_ in owner_projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
+                            <div  v-for="project_ in public_projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
 
                                 <div class="content">
                                     <center>
@@ -153,6 +155,7 @@
                                         <div class="meta">
                                             <a href="User_page.html"> Created by: {{project_.owner}}</a>
                                         </div>
+                                        <a v-if="project_.owner==requester.username" v-on:click="removeProject(project_.id, project_.name)">Remove</a>
                                     </center>
                                     <div class="description">
                                         {{project_.description}}
@@ -171,10 +174,13 @@
                                     Forked Projects
                                 </button>
                             </div> 
-                        <h2 vue-else> Other Projects</h2>
-                        <div class="ui link cards">
+                        </div>
+                        
 
-                            <div  v-for="project_ in public_projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
+                        <h2 v-if="private_projects.length > 0"> Private Projects</h2>
+                        <div v-if="private_projects.length > 0" class="ui link cards">
+
+                            <div  v-for="project_ in private_projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
                                 <div class="content">
                                     <center>
                                         <div class="header">
@@ -205,10 +211,10 @@
                             </div>
                         </div>
                         <br>
-                        <a style="float:left;padding-left:8px;padding-bottom:8px;padding-top:8px;font-size:25px;" class="item"
+                        <!-- <a style="float:left;padding-left:8px;padding-bottom:8px;padding-top:8px;font-size:25px;" class="item"
                         href="Myprojects_page.html">Prev</a>
                         <a style="float:right;padding-right:8px;padding-bottom:8px;padding-top:8px;font-size:25px;" class="item"
-                        href="Myprojects_page.html">Next></a>
+                        href="Myprojects_page.html">Next></a> -->
                         <br>
                     </div>
                 </div>
