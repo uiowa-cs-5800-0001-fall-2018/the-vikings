@@ -245,9 +245,6 @@ var Project = Vue.extend({
         }
         this.run();
     },
-    created: function() {
-        this.run();
-    },
     methods: {
         run: function() {
             this.$http.get('/projects/'+this.project_id, {
@@ -380,9 +377,11 @@ var Project = Vue.extend({
             
         },
         save: function(){
+            console.log("jmekmwekmew")
             var xml = Blockly.Xml.workspaceToDom(this.workspace);
             var xml_text = Blockly.Xml.domToText(xml);
             json = {"p_id": this.project_id, "content": xml_text}
+            console.log(xml_text)
             this.$http.post('/save_project', json, {
                 headers: {
                     'Content-Type': 'application/json',
