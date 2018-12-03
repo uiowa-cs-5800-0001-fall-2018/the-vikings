@@ -152,6 +152,7 @@
                                         <div class="meta">
                                             <a href="User_page.html"> Created by: {{project_.owner}}</a>
                                         </div>
+                                        <a v-if="project_.owner==requester.username" v-on:click="removeProject(project_.id, project_.name)">Remove</a>
                                     </center>
                                     <div class="description">
                                         {{project_.description}}

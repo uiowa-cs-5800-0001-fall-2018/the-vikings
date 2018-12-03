@@ -177,6 +177,28 @@ var Profile = Vue.extend({
             alert("logged out!");
             router.go({ name: 'home' })
         },
+        removeProject: function(id_,name) {
+            
+            if (confirm('Are you sure about removing project titled ' + name + '?')) {
+                console.log(id_)
+                this.$http.post('/remove_project', { "p_id": id_ }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': this.token
+                    }
+                }).then(response => {
+                    body = response.body
+                    this.status = body.status
+                    if (body.status == "success") {
+                        alert("removed!")
+                        router.push({ path: "/redirect/user/" + this.username })
+                    }
+
+                });
+            } else {
+                // Do nothing!
+            }
+        },
         search: function() {
             this.$http.post('/search', { "query": this.query }, {
                 headers: {
