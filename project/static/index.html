@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Vikings</title>
-    <meta name="description" content="münhasır is a cloud based platform that enables users to write and keep military class encrypted diaries."/>
+    <meta name="description" content="vikings" />
     <link rel="stylesheet" type="text/css" href="semantic/assets/css/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="semantic/assets/css/mycss1.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style type="text/css">
+    #ui-id-1 {
+        z-index: 1000;
+        position: relative;
+        width: 100px;
+    }
+    </style>
 </head>
+
 <body>
     <main id="app"></main>
-
     <template id="profile">
         <div>
             <div id="id01" class="modal">
-
                 <form class="modal-content animate" action="/action_page.php">
                     <h3 style="text-align:center;padding-top:8px;">Please ask any questions or comments and we will reply to
                     you via email.</h3>
                     <div class="container">
                         <textarea rows=20 style="width:100%"></textarea>
                     </div>
-
                     <div class="container" style="background-color:#f1f1f1">
                         <button type="submit">Send</button>
                         <button type="button" onclick="document.getElementById('id01').style.display='none'" style="background-color:red;">Cancel</button>
@@ -30,7 +37,6 @@
                 </form>
             </div>
             <div id="id01__" class="modal">
-
                 <div class="modal-content animate">
                     <h2>Create a new project</h2>
                     <div class="container">
@@ -41,7 +47,6 @@
                                 </div>
                                 <p>{{this.msg}}</p>
                             </div>
-
                             <div v-if="status=='success'" class="ui  success message">
                                 <div class="header">
                                     Success
@@ -50,21 +55,15 @@
                             </div>
                             <label for="projectname"><b>Name</b></label>
                             <input type="text" placeholder="Enter Name" name="projectname" v-model="project.name" required>
-
                             <label for="projectndesc"><b>Description</b></label>
                             <textarea type="projectndesc" placeholder="Enter Description" name="projectndesc" v-model="project.desc"></textarea>
-
                             <label for="projectndesc"><b>Public?</b></label>
                             <input type="checkbox" name="projectpublic" v-model="project.is_public">
-
                             <button type="submit">Create</button>
-
                         </form>
                     </div>
-
                     <div class="container" style="background-color:#f1f1f1">
                         <button type="button" onclick="document.getElementById('id01__').style.display='none'" class="cancelbtn">Cancel</button>
-
                     </div>
                 </div>
             </div>
@@ -76,10 +75,9 @@
                             <div class="right item">
                                 <div class="ui category search item">
                                     <div class="ui icon input">
-                                        <input class="prompt" type="text" placeholder="Search Projects...">
+                                        <input class="prompt" id="searchbox" v-model="query" v-on:input="search" type="text" placeholder="Search Projects...">
                                         <i class="search link icon"></i>
                                     </div>
-                                    <div class="results"></div>
                                 </div>
                                 <router-link class="item" :to="{ name: 'home'}">
                                     Home
@@ -87,7 +85,6 @@
                                 <a  v-if="requester.username!=''"  class="item" id="registermod" v-on:click="logout()">
                                     Logout
                                 </a>
-
                             </div>
                         </div>
                     </div>
@@ -99,7 +96,6 @@
                             <a href="#">Change Username</a>
                             <a href="#">Change Password</a>
                             <a href="#">Edit Bio</a>
-
                         </div>
                         <div class="item" id="userside">
                             <center>
@@ -112,7 +108,7 @@
                         <div class="item">
                             <div class="header">Home</div>
                             <div class="menu">
-                                <router-link class="item" :to="{ name: 'profile', params: { 'username':  username}}">My Page</router-link> 
+                                <router-link class="item" :to="{ name: 'profile', params: { 'username':  username}}">My Page</router-link>
                             </div>
                         </div>
                         <div class="item">
@@ -137,7 +133,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="centered-information">
                         <center>
                             <h2 v-if="username===requester.username">My Projects!</h2>
@@ -146,12 +141,11 @@
                         <h2 v-if="username==requester.username">Your Projects!</h2>
                         <h2 vue-else>Projects</h2>
                         <div class="ui link cards">
-
-                            <div  v-for="project_ in projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
-
+                            <div v-for="project_ in projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
                                 <div class="content">
                                     <center>
-                                        <div class="header"><router-link :to="{ name: 'project', params: { 'project_id': project_.id }}">{{project_.name}}</router-link><a><i class="star outline icon"
+                                        <div class="header">
+                                            <router-link :to="{ name: 'project', params: { 'project_id': project_.id }}">{{project_.name}}</router-link><a><i class="star outline icon"
                                             style="float:right;"></i></a>
                                         </div>
                                         <div class="meta">
@@ -174,7 +168,7 @@
                                     <i class="random icon"></i>
                                     Forked Projects
                                 </button>
-                            </div>  
+                            </div>
                         </div>
                         <br>
                         <a style="float:left;padding-left:8px;padding-bottom:8px;padding-top:8px;font-size:25px;" class="item"
@@ -182,437 +176,464 @@
                         <a style="float:right;padding-right:8px;padding-bottom:8px;padding-top:8px;font-size:25px;" class="item"
                         href="Myprojects_page.html">Next></a>
                         <br>
-
-
                     </div>
                 </div>
             </div>
         </div>
     </template>
-
     <template id="home">
-
         <div>
             <!-- The Sign in Modal -->
             <div id="id01" class="modal">
-
                 <div class="modal-content animate">
                     <div class="imgcontainer">
                         <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
                         <img src="semantic/assets/img/Helmet Cutout.png" alt="Avatar" class="avatar">
                     </div>
-
-                    <div class="container">
-                        <form v-on:submit.prevent="logInUser">
-                            <div v-if="status=='fail'" class="ui negative message">
-                                <div class="header">
-                                    Error
+                        <div class="container">
+                            <form v-on:submit.prevent="logInUser">
+                                <div v-if="status=='fail'" class="ui negative message">
+                                    <div class="header">
+                                        Error
+                                    </div>
+                                    <p>{{this.msg}}</p>
                                 </div>
-                                <p>{{this.msg}}</p>
-                            </div>
-
-                            <div v-if="status=='success'" class="ui  success message">
-                                <div class="header">
-                                    Success
+                                <div v-if="status=='success'" class="ui  success message">
+                                    <div class="header">
+                                        Success
+                                    </div>
+                                    <p>{{this.msg}}</p>
                                 </div>
-                                <p>{{this.msg}}</p>
-                            </div>
-                            <label for="username"><b>Username</b></label>
-                            <input type="text" placeholder="Enter Username" name="username" v-model="login.username" required>
-
-                            <label for="password"><b>Password</b></label>
-                            <input type="password" placeholder="Enter Password" name="password" v-model="login.password" required>
-
-                            <button type="submit">Login</button>
-                            <label>
-                                <input type="checkbox" checked="checked" name="remember"> Remember me
-                            </label>
-                        </form>
-                    </div>
-
-                    <div class="container" style="background-color:#f1f1f1">
-                        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-                        <span class="psw"><a href="#" id="forgotid" onclick="document.getElementById('forgottenID').style.display='block'">Forgot
+                                <label for="username"><b>Username</b></label>
+                                <input type="text" placeholder="Enter Username" name="username" v-model="login.username" required>
+                                <label for="password"><b>Password</b></label>
+                                <input type="password" placeholder="Enter Password" name="password" v-model="login.password" required>
+                                <button type="submit">Login</button>
+                                <label>
+                                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                                </label>
+                            </form>
+                        </div>
+                        <div class="container" style="background-color:#f1f1f1">
+                            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+                            <span class="psw"><a href="#" id="forgotid" onclick="document.getElementById('forgottenID').style.display='block'">Forgot
                         password?</a></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!--Forgot Password Modal-->
-            <div id="forgottenID" class="modal">
-
-                <form class="modal-content animate" action="/action_page.php">
-                    <div class="container">
-                        <label for="Sendpass"><b>Enter email and we will send the password</b></label>
-                        <input type="text" placeholder="Leif-erikson@vikings.com">
-
-                        <button type="submit">Send</button>
-                    </div>
-
-                    <div class="container" style="background-color:#f1f1f1">
-                        <button type="button" onclick="document.getElementById('forgottenID').style.display='none'" class="cancelbtn">Cancel</button>
-                    </div>
-                </form>
-            </div>
-
-            <!--The Register Modal-->
-            <div id="id02" class="modal register">
-
-                <div class="modal-content animate">
-                    <div class="imgcontainer">
-                        <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
-                        <img src="semantic/assets/img/Helmet Cutout.png" alt="Avatar" class="avatar">
-                    </div>
-
-                    <form v-on:submit.prevent="registerUser">
+                <!--Forgot Password Modal-->
+                <div id="forgottenID" class="modal">
+                    <form class="modal-content animate" action="/action_page.php">
                         <div class="container">
-                    <!-- <label for="fname"><b>First Name</b></label>
+                            <label for="Sendpass"><b>Enter email and we will send the password</b></label>
+                            <input type="text" placeholder="Leif-erikson@vikings.com">
+                            <button type="submit">Send</button>
+                        </div>
+                        <div class="container" style="background-color:#f1f1f1">
+                            <button type="button" onclick="document.getElementById('forgottenID').style.display='none'" class="cancelbtn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                <!--The Register Modal-->
+                <div id="id02" class="modal register">
+                    <div class="modal-content animate">
+                        <div class="imgcontainer">
+                            <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                            <img src="semantic/assets/img/Helmet Cutout.png" alt="Avatar" class="avatar">
+                    </div>
+                            <form v-on:submit.prevent="registerUser">
+                                <div class="container">
+                                    <!-- <label for="fname"><b>First Name</b></label>
                     <input type="text" placeholder="Leif" name="fname" required>
 
                     <label for="lname"><b>Last Name</b></label>
                     <input type="text" placeholder="Erikson" name="lname" required> -->
-                    <div v-if="status=='fail'" class="ui negative message">
-                        <div class="header">
-                            Error
+                                    <div v-if="status=='fail'" class="ui negative message">
+                                        <div class="header">
+                                            Error
+                                        </div>
+                                        <p>{{this.msg}}</p>
+                                    </div>
+                                    <div v-if="status=='success'" class="ui  success message">
+                                        <div class="header">
+                                            Success
+                                        </div>
+                                        <p>{{this.msg}}</p>
+                                    </div>
+                                    <label for="uname"><b>Username</b></label>
+                                    <input type="text" placeholder="Enter Username" name="username" v-model="register.username" required>
+                                    <label for="email"><b>Email Address</b></label>
+                                    <input type="text" placeholder="Leif-erikson@vikings.com" name="email" v-model="register.email" required>
+                                    <label for="password"><b>Password</b></label>
+                                    <input type="password" id="passwordchoice" placeholder="Password must be >= 6 characters" name="password" v-model="register.password" onkeyup="correctpass();" required>
+                                    <label for="psw"><b>Repeat Password</b></label>
+                                    <input type="password" id="passwordchecking" placeholder="Repeat Password" name="password" v-model="register.password2" onkeyup="correctpass();" required>
+                                    <span id="incorrect_message"></span>
+                                    <button type="submit">Login</button>
+                                    <label>
+                                        <input type="checkbox" checked="checked" name="remember"> Remember me
+                                    </label>
+                                </div>
+                            </form>
+                            <div class="container" style="background-color:#f1f1f1">
+                                <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+                            </div>
                         </div>
-                        <p>{{this.msg}}</p>
                     </div>
-
-                    <div v-if="status=='success'" class="ui  success message">
-                        <div class="header">
-                            Success
-                        </div>
-                        <p>{{this.msg}}</p>
-                    </div>
-                    <label for="uname"><b>Username</b></label>
-                    <input type="text" placeholder="Enter Username" name="username" v-model="register.username" required>
-
-                    <label for="email"><b>Email Address</b></label>
-                    <input type="text" placeholder="Leif-erikson@vikings.com" name="email" v-model="register.email" required>
-
-                    <label for="password"><b>Password</b></label>
-                    <input type="password" id="passwordchoice" placeholder="Password must be >= 6 characters" name="password" v-model="register.password"
-                    onkeyup="correctpass();" required>
-
-                    <label for="psw"><b>Repeat Password</b></label>
-                    <input type="password" id="passwordchecking" placeholder="Repeat Password" name="password" v-model="register.password2" onkeyup="correctpass();"
-                    required>
-                    <span id="incorrect_message"></span>
-
-                    <button type="submit">Login</button>
-                    <label>
-                        <input type="checkbox" checked="checked" name="remember"> Remember me
-                    </label>
-                </div>
-            </form>
-
-            <div class="container" style="background-color:#f1f1f1">
-                <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-
-    <!--main stuff here-->
-    <div id="grad">
-        <div class="ui container">
-            <div class="ui secondary top large menu">
-                <div class="left item">
-                    <a class="toc item">
+                    <!--main stuff here-->
+                    <div id="grad">
+                        <div class="ui container">
+                            <div class="ui secondary top large menu">
+                                <div class="left item">
+                                    <a class="toc item">
 
                     </a>
-                </div>
-                <div class="right item">
-                    <div class="ui search">
-                        <div class="ui icon input">
-                            <input class="prompt" type="text" placeholder="Search Projects...">
-                            <i class="search link icon"></i>
-                        </div>
-                        <div class="results"></div>
-
-                    </div>
-                    <router-link :to="{ name: 'project', params: { project_id: 1 }}"><a class="item">
+                                </div>
+                                <div class="right item">
+                                    <div class="ui search">
+                                        <div class="ui icon input">
+                                            <input class="prompt" type="text" placeholder="Search Projects...">
+                                            <i class="search link icon"></i>
+                                        </div>
+                                        <div class="results"></div>
+                                    </div>
+                                    <router-link :to="{ name: 'project', params: { project_id: 1 }}"><a class="item">
                         Tutorial
                     </a></router-link>
-                    <a  v-if="requester==''" class="item" id="signin" onclick="document.getElementById('id01').style.display='block'">
+                                    <a  v-if="requester==''" class="item" id="signin" onclick="document.getElementById('id01').style.display='block'">
                         Sign in
                     </a>
-                    <a  v-if="requester==''"  class="item" id="registermod" onclick="document.getElementById('id02').style.display='block'">
+                                    <a  v-if="requester==''"  class="item" id="registermod" onclick="document.getElementById('id02').style.display='block'">
                         Register
                     </a>
-                    <a  v-if="requester!=''"  class="item" id="registermod" v-on:click="logout()">
+                                    <a  v-if="requester!=''"  class="item" id="registermod" v-on:click="logout()">
                         Logout
                     </a>
-                    <router-link v-if="requester!=''"  class="item" :to="{ name: 'profile', params: { 'username':  requester.username}}">My Profile</router-link> 
-                </div>
-            </div>
-        </div>
-
-        <div class="vikinganimation">
-            <h5 style="position:absolute; Top:200px; right:500px;left:800px;white-space: nowrap;">In a sea of code it
+                                    <router-link v-if="requester!=''" class="item" :to="{ name: 'profile', params: { 'username':  requester.username}}">My Profile</router-link>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vikinganimation">
+                            <h5 style="position:absolute; Top:200px; right:500px;left:800px;white-space: nowrap;">In a sea of code it
             is easy to get swept away...</h5>
-            <h5 style="position:absolute; Top:210px; right:400px; left:850px;white-space: nowrap;">Don't get swept
-            away. Learn code with the Vikings!</h5> 
-            <div class="topwave wavepropertiesblue"></div>
-            <div class="middlewave2lightblue wavepropertieslightblue"></div>
-            <div class="middlewave2white wavepropertieswhite"></div>
-            <div class="middlewave2 wavepropertiesblue"></div>
-            <div class="middlewave1lightblue wavepropertieslightblue"></div>
-            <div class="vikingship"></div>
-            <div class="middlewave1white wavepropertieswhite"></div>
-            <div class="middlewave1 wavepropertiesblue"></div>
-            <div class="bottomwavelightblue wavepropertieslightblue"></div>
-            <div class="bottomwavewhite wavepropertieswhite"></div>
-            <div class="bottomwave wavepropertiesblue"></div>
-
-        </div>
-
-        <div class="bluebackground">
-            <div style="position:absolute; top:900px;left:10px;color:white;">
-                <h2>Learn How to Code</h2>
-                <h3 style="text-indent: 30px;">    Make coding less difficult, learn with the Vikings. With todays need for computer
+                            <h5 style="position:absolute; Top:210px; right:400px; left:850px;white-space: nowrap;">Don't get swept
+            away. Learn code with the Vikings!</h5>
+                            <div class="topwave wavepropertiesblue"></div>
+                            <div class="middlewave2lightblue wavepropertieslightblue"></div>
+                            <div class="middlewave2white wavepropertieswhite"></div>
+                            <div class="middlewave2 wavepropertiesblue"></div>
+                            <div class="middlewave1lightblue wavepropertieslightblue"></div>
+                            <div class="vikingship"></div>
+                            <div class="middlewave1white wavepropertieswhite"></div>
+                            <div class="middlewave1 wavepropertiesblue"></div>
+                            <div class="bottomwavelightblue wavepropertieslightblue"></div>
+                            <div class="bottomwavewhite wavepropertieswhite"></div>
+                            <div class="bottomwave wavepropertiesblue"></div>
+                        </div>
+                        <div class="bluebackground">
+                            <div style="position:absolute; top:900px;left:10px;color:white;">
+                                <h2>Learn How to Code</h2>
+                                <h3 style="text-indent: 30px;">    Make coding less difficult, learn with the Vikings. With todays need for computer
                     <br> scientists, coding is in high demand. But to be able to code can prove to be difficult.
                     <br>  Using blocks and code next to each other, coding becomes easier to see and 
                     <br> understand. Further, with the help of Turtle, the ability to see how to code runs
                     <br> helps those struggling to fully understand coding.</h3>
-
-            </div>
-            <img src ="semantic/assets/img/examplecoding.jpg" style="width:800px;position: absolute;top:900px;left:700px;">
-            <div class="transitionlightblue wavepropertieslightblue"></div>
-
-        </div>
-        <div class="lightbluebackground">
-        </div>
-    </div>
-</div>
-</template>
-
-<template id="project">
-    <div>
-        <!-- The Save as Modal -->
-        <div id="id01" class="modal">
-
-            <form class="modal-content animate" v-on:submit.prevent="saveAs">
-                <div class="imgcontainer">
-                    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-                </div>
-
-                <div class="container">
-                    <label for="filename"><b>File Name</b></label>
-                    <input type="text" placeholder="Enter Name" name="saveasname" v-model="saveas.name" required>
-                    
-
-                    <label for="aboutfile"><b>Write a Description</b></label>
-                  
-                   <br>
-                   <textarea rows="3" placeholder="Enter Description" name="saveasdesc" v-model="saveas.desc"></textarea>
-
-                    <button type="save">Save</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- The Comment Modal -->
-        <div id="id02" class="modal">
-
-            <form class="modal-content animate" action="/action_page.php">
-                <div class="imgcontainer">
-                    <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
-                </div>
-
-                <div class="container">
-                    <label for="commentonfile"><b>Write a Comment</b></label>
-                    <textarea rows=30 style="width:100%"></textarea>
-
-                    <button type="save">Save</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Are you sure Modal -->
-        <div id="id03" class="modal">
-
-            <form class="modal-content animate" action="/action_page.php">
-                <div class="imgcontainer">
-                    <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
-                </div>
-
-                <div class="container">
-                    <center><label for="newfile"><b>Are you sure you want to start a new file?</b></label></center>
-
-                    <button type="yes" onclick="document.getElementById('id03').style.display='none'" style="background-color: #4CAF50;"
-                    href="main_page.html">yes</button>
-                    <button type="no" onclick="document.getElementById('id03').style.display='none'" style="background-color: #f44336;">no</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Play Modal -->
-        <div id="id04" class="ui basic modal">
-            <form class="modal-content animate">
-                
-                <div class="imgcontainer">
-                    <span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal">&times;</span>
-                </div>
-
-                <br>
-            <div class="container">
-                <center id="canvas-cont">
-                </center>
-            </div>
-            
-            </form>
-        </div>
-
-        <!--creates main body-->
-        <div class="wrapper">
-            <!--top main bar-->
-            <div class="ui top fixed menu">
-                <div class="left top fixed menu">
-                    <div class="item">
-                        <img src="semantic/assets/img/helmet_color_1_PUS_icon.ico">
-                    </div>
-                    <router-link :to="{ name: 'profile', params: { 'username':  requester.username}}" class="item linkref"><i class="home icon"></i>Home</router-link>
-
-                    <a v-if="is_justblockly==false" class="item linkref" v-on:click="justblockly()">Just Blockly</a>
-                     <a v-if="is_justblockly==true" class="item linkref" v-on:click="un_justblockly()"> Double-view</a>
-                    <a v-if="is_justcode==false" class="item linkref" v-on:click="justcode()">Just Code</a>
-                    <a v-if="is_justcode==true" class="item linkref" v-on:click="un_justcode()">Double-view</a>
-                    <a class="item linkref" v-on:click="save()"><i class="save icon"></i>Save</a>
-                    <a class="item linkref" onclick="document.getElementById('id01').style.display='block'"><i
-                        class="pencil alternate icon"></i>Save As</a>
-                        <a class="item linkref" onclick="document.getElementById('id02').style.display='block'"><i class="address book outline icon"></i>Comment</a>
-                        <!-- <a class="item linkref" onclick="document.getElementById('id03').style.display='block'"><i class="file alternate icon"></i>New
-                        Project</a> -->
-                        <a class="item linkref" v-on:click="run_blocks()"><i class="play icon"></i></a>   
-                        <a v-on:click="fork_it()" class="item linkref"><i class="random icon"></i>Fork</a>
-                        <a class="item linkref"> <i class="star outline icon"></i></a>
-                        <div class="ui category search item">
-                            <div class="ui icon input">
-                                <input class="prompt" type="text" placeholder="Search Projects...">
-                                <i class="search link icon"></i>
                             </div>
+                            <img src ="semantic/assets/img/examplecoding.jpg" style="width:800px;position: absolute;top:900px;left:700px;">
+                            <div class="transitionlightblue wavepropertieslightblue"></div>
                         </div>
-                        <div class="item" style="float:right;">
-                            <div class="ui dropdown">
-                                <i class="user teal circle icon big"></i>
-                                <div class="menu">
-                                    <div class="item">New</div>
-                                    <div class="item">
-                                        <span class="description">ctrl + o</span>
-                                        Open...
-                                    </div>
-                                    <div class="item">
-                                        <span class="description">ctrl + s</span>
-                                        Save as...
-                                    </div>
-                                    <div class="item">
-                                        <span class="description">ctrl + r</span>
-                                        Rename
-                                    </div>
-                                    <div class="item">Make a copy</div>
-                                    <div class="item">
-                                        <i class="folder icon"></i>
-                                        Move to folder
-                                    </div>
-                                    <div class="item">
-                                        <i class="trash icon"></i>
-                                        Move to trash
-                                    </div>
-                                    <div class="divider"></div>
-                                    <div class="item">Download As...</div>
-                                    <div class="item">
-                                        <i class="dropdown icon"></i>
-                                        Publish To Web
-                                        <div class="menu">
-                                            <div class="item">Google Docs</div>
-                                            <div class="item">Google Drive</div>
-                                            <div class="item">Dropbox</div>
-                                            <div class="item">Adobe Creative Cloud</div>
-                                            <div class="item">Private FTP</div>
-                                            <div class="item">Another Service...</div>
+                        <div class="lightbluebackground">
+                        </div>
+                    </div>
+                </div>
+    </template>
+    <template id="project">
+        <div>
+            <!-- The Save as Modal -->
+            <div id="id01" class="modal">
+                <form class="modal-content animate" v-on:submit.prevent="saveAs">
+                    <div class="imgcontainer">
+                        <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    </div>
+                    <div class="container">
+                        <label for="filename"><b>File Name</b></label>
+                        <input type="text" placeholder="Enter Name" name="saveasname" v-model="saveas.name" required>
+                        <label for="aboutfile"><b>Write a Description</b></label>
+                        <br>
+                        <textarea rows="3" placeholder="Enter Description" name="saveasdesc" v-model="saveas.desc"></textarea>
+                        <button type="save">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!-- The Comment Modal -->
+            <div id="id02" class="modal">
+                <form class="modal-content animate" action="/action_page.php">
+                    <div class="imgcontainer">
+                        <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    </div>
+                    <div class="container">
+                        <label for="commentonfile"><b>Write a Comment</b></label>
+                        <textarea rows=30 style="width:100%"></textarea>
+                        <button type="save">Save</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Are you sure Modal -->
+            <div id="id03" class="modal">
+                <form class="modal-content animate" action="/action_page.php">
+                    <div class="imgcontainer">
+                        <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    </div>
+                    <div class="container">
+                        <center><label for="newfile"><b>Are you sure you want to start a new file?</b></label></center>
+                        <button type="yes" onclick="document.getElementById('id03').style.display='none'" style="background-color: #4CAF50;" href="main_page.html">yes</button>
+                        <button type="no" onclick="document.getElementById('id03').style.display='none'" style="background-color: #f44336;">no</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Play Modal -->
+            <div id="id04" class="ui basic modal">
+                <form class="modal-content animate">
+                    <div class="imgcontainer">
+                        <span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    </div>
+                    <br>
+                    <div class="container">
+                        <center id="canvas-cont">
+                        </center>
+                    </div>
+                </form>
+            </div>
+            <!--creates main body-->
+            <div class="wrapper">
+                <!--top main bar-->
+                <div class="ui top fixed menu">
+                    <div class="left top fixed menu">
+                        <div class="item">
+                            <img src="semantic/assets/img/helmet_color_1_PUS_icon.ico">
+                    </div>
+                            <router-link :to="{ name: 'profile', params: { 'username':  requester.username}}" class="item linkref"><i class="home icon"></i>Home</router-link>
+                            <a v-if="is_justblockly==false" class="item linkref" v-on:click="justblockly()">Just Blockly</a>
+                            <a v-if="is_justblockly==true" class="item linkref" v-on:click="un_justblockly()"> Double-view</a>
+                            <a v-if="is_justcode==false" class="item linkref" v-on:click="justcode()">Just Code</a>
+                            <a v-if="is_justcode==true" class="item linkref" v-on:click="un_justcode()">Double-view</a>
+                            <a class="item linkref" v-if="owner==requester.username" v-on:click="save()"><i class="save icon"></i>Save</a>
+                            <a class="item linkref" v-if="owner==requester.username"  onclick="document.getElementById('id01').style.display='block'"><i
+                        class="pencil alternate icon"></i>Save As</a>
+                            <a class="item linkref" onclick="document.getElementById('id02').style.display='block'"><i class="address book outline icon"></i>Comment</a>
+                            <!-- <a class="item linkref" onclick="document.getElementById('id03').style.display='block'"><i class="file alternate icon"></i>New
+                        Project</a> -->
+                            <a class="item linkref" v-on:click="run_blocks()"><i class="play icon"></i></a>
+                            <a v-on:click="fork_it()" class="item linkref"><i class="random icon"></i>Fork</a>
+                            <a class="item linkref"> <i class="star outline icon"></i></a>
+                            <div class="ui category search item">
+                                <div class="ui icon input">
+                                    <input class="prompt" id="searchbox" v-model="query" v-on:input="search" type="text" placeholder="Search Projects...">
+                                    <i class="search link icon"></i>
+                                </div>
+                            </div>
+                            <div class="item" style="float:right;">
+                                <div class="ui dropdown">
+                                    <i class="user teal circle icon big"></i>
+                                    <div class="menu">
+                                        <div class="item">New</div>
+                                        <div class="item">
+                                            <span class="description">ctrl + o</span>
+                                            Open...
                                         </div>
+                                        <div class="item">
+                                            <span class="description">ctrl + s</span>
+                                            Save as...
+                                        </div>
+                                        <div class="item">
+                                            <span class="description">ctrl + r</span>
+                                            Rename
+                                        </div>
+                                        <div class="item">Make a copy</div>
+                                        <div class="item">
+                                            <i class="folder icon"></i>
+                                            Move to folder
+                                        </div>
+                                        <div class="item">
+                                            <i class="trash icon"></i>
+                                            Move to trash
+                                        </div>
+                                        <div class="divider"></div>
+                                        <div class="item">Download As...</div>
+                                        <div class="item">
+                                            <i class="dropdown icon"></i>
+                                            Publish To Web
+                                            <div class="menu">
+                                                <div class="item">Google Docs</div>
+                                                <div class="item">Google Drive</div>
+                                                <div class="item">Dropbox</div>
+                                                <div class="item">Adobe Creative Cloud</div>
+                                                <div class="item">Private FTP</div>
+                                                <div class="item">Another Service...</div>
+                                            </div>
+                                        </div>
+                                        <div class="item">E-mail Collaborators</div>
                                     </div>
-                                    <div class="item">E-mail Collaborators</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!--Right side of the document for code-->
-            <div id="rightside" class="split left">
-                <div class="form infront">
-                    <div class="field"></div>
-                    <textarea rows="42">{{js_code}}</textarea>
+                <!--Right side of the document for code-->
+                <div id="rightside" class="split left">
+                    <div class="form infront">
+                        <div class="field"></div>
+                        <textarea rows="42">{{js_code}}</textarea>
+                    </div>
                 </div>
-            </div>
-
-            <!--left side of the document for blockly-->
-            <div id="leftside" class="split right">
-                <div id="blocklyDiv" ref="blocklyDiv" style="height: 100%; width:100%;"></div>
-                <xml id="toolbox" ref="toolbox" style="display: none">
-
-    <category name="Turtle">
-        <block type="initiate_drawing"></block>
-        <block type="move"><value name="VALUE"><block type="math_number"><title name="NUM">10</title></block></value></block>
-        <block type="turn"><value name="VALUE"><block type="math_number"><title name="NUM">90</title></block></value></block>
-        <block type="width"><value name="WIDTH"><block type="math_number"><title name="NUM">1</title></block></value></block>
-        <block type="setcolor"></block>
-    </category>
-    <category name="Control">
-        <block type="controls_if"></block>
-        <block type="controls_repeat"></block>
-        <block type="controls_whileUntil"></block>
-        <block type="controls_for"><value name="FROM"><block type="math_number"><title name="NUM">1</title></block></value><value name="TO"><block type="math_number"><title name="NUM">10</title></block></value></block>
-        <block type="controls_forEach"></block>
-        <block type="controls_flow_statements"></block>
-    </category>
-    <category name="Logic">
-        <block type="logic_compare"></block>
-        <block type="logic_operation"></block>
-        <block type="logic_negate"></block>
-        <block type="logic_boolean"></block>
-        <block type="logic_null"></block>
-        <block type="logic_ternary"></block>
-    </category>
-    <category name="Math">
-        <block type="math_number"></block>
-        <block type="math_arithmetic"></block>
-        <block type="math_single"></block>
-        <block type="math_trig"></block>
-        <block type="math_constant"></block>
-        <block type="math_number_property"></block>
-        <block type="math_change"><value name="DELTA"><block type="math_number"><title name="NUM">1</title></block></value></block>
-        <block type="math_round"></block>
-        <block type="math_on_list"></block>
-        <block type="math_modulo"></block>
-        <block type="math_constrain"><value name="LOW"><block type="math_number"><title name="NUM">1</title></block></value><value name="HIGH"><block type="math_number"><title name="NUM">100</title></block></value></block>
-        <block type="math_random_int"><value name="FROM"><block type="math_number"><title name="NUM">1</title></block></value><value name="TO"><block type="math_number"><title name="NUM">100</title></block></value></block>
-        <block type="math_random_float"></block>
-    </category>
-    <category name="Lists">
-        <block type="lists_create_empty"></block>
-        <block type="lists_create_with"></block>
-        <block type="lists_repeat"><value name="NUM"><block type="math_number"><title name="NUM">5</title></block></value></block>
-        <block type="lists_length"></block>
-        <block type="lists_isEmpty"></block>
-        <block type="lists_indexOf"><value name="VALUE"><block type="variables_get"><title name="VAR">list</title></block></value></block>
-        <block type="lists_getIndex"><value name="VALUE"><block type="variables_get"><title name="VAR">list</title></block></value></block>
-        <block type="lists_setIndex"><value name="LIST"><block type="variables_get"><title name="VAR">list</title></block></value></block>
-        <block type="lists_getSublist"><value name="LIST"><block type="variables_get"><title name="VAR">list</title></block></value></block>
-    </category>
-    <category name="Variables" custom="VARIABLE">
-        
-    </category>
-    <category name="Procedures" custom="PROCEDURE">
-        
-    </category>
-</xml>
-
-            </div>
-            <!--choices-->
-    <!-- <div id="mySidenav" class="sidenav">
+                <!--left side of the document for blockly-->
+                <div id="leftside" class="split right">
+                    <div id="blocklyDiv" ref="blocklyDiv" style="height: 100%; width:100%;"></div>
+                    <xml id="toolbox" ref="toolbox" style="display: none">
+                        <category name="Turtle">
+                            <block type="initiate_drawing"></block>
+                            <block type="move">
+                                <value name="VALUE">
+                                    <block type="math_number">
+                                        <title name="NUM">10</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="turn">
+                                <value name="VALUE">
+                                    <block type="math_number">
+                                        <title name="NUM">90</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="width">
+                                <value name="WIDTH">
+                                    <block type="math_number">
+                                        <title name="NUM">1</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="setcolor"></block>
+                        </category>
+                        <category name="Control">
+                            <block type="controls_if"></block>
+                            <block type="controls_repeat"></block>
+                            <block type="controls_whileUntil"></block>
+                            <block type="controls_for">
+                                <value name="FROM">
+                                    <block type="math_number">
+                                        <title name="NUM">1</title>
+                                    </block>
+                                </value>
+                                <value name="TO">
+                                    <block type="math_number">
+                                        <title name="NUM">10</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="controls_forEach"></block>
+                            <block type="controls_flow_statements"></block>
+                        </category>
+                        <category name="Logic">
+                            <block type="logic_compare"></block>
+                            <block type="logic_operation"></block>
+                            <block type="logic_negate"></block>
+                            <block type="logic_boolean"></block>
+                            <block type="logic_null"></block>
+                            <block type="logic_ternary"></block>
+                        </category>
+                        <category name="Math">
+                            <block type="math_number"></block>
+                            <block type="math_arithmetic"></block>
+                            <block type="math_single"></block>
+                            <block type="math_trig"></block>
+                            <block type="math_constant"></block>
+                            <block type="math_number_property"></block>
+                            <block type="math_change">
+                                <value name="DELTA">
+                                    <block type="math_number">
+                                        <title name="NUM">1</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="math_round"></block>
+                            <block type="math_on_list"></block>
+                            <block type="math_modulo"></block>
+                            <block type="math_constrain">
+                                <value name="LOW">
+                                    <block type="math_number">
+                                        <title name="NUM">1</title>
+                                    </block>
+                                </value>
+                                <value name="HIGH">
+                                    <block type="math_number">
+                                        <title name="NUM">100</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="math_random_int">
+                                <value name="FROM">
+                                    <block type="math_number">
+                                        <title name="NUM">1</title>
+                                    </block>
+                                </value>
+                                <value name="TO">
+                                    <block type="math_number">
+                                        <title name="NUM">100</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="math_random_float"></block>
+                        </category>
+                        <category name="Lists">
+                            <block type="lists_create_empty"></block>
+                            <block type="lists_create_with"></block>
+                            <block type="lists_repeat">
+                                <value name="NUM">
+                                    <block type="math_number">
+                                        <title name="NUM">5</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="lists_length"></block>
+                            <block type="lists_isEmpty"></block>
+                            <block type="lists_indexOf">
+                                <value name="VALUE">
+                                    <block type="variables_get">
+                                        <title name="VAR">list</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="lists_getIndex">
+                                <value name="VALUE">
+                                    <block type="variables_get">
+                                        <title name="VAR">list</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="lists_setIndex">
+                                <value name="LIST">
+                                    <block type="variables_get">
+                                        <title name="VAR">list</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="lists_getSublist">
+                                <value name="LIST">
+                                    <block type="variables_get">
+                                        <title name="VAR">list</title>
+                                    </block>
+                                </value>
+                            </block>
+                        </category>
+                        <category name="Variables" custom="VARIABLE">
+                        </category>
+                        <category name="Procedures" custom="PROCEDURE">
+                        </category>
+                    </xml>
+                </div>
+                <!--choices-->
+                <!-- <div id="mySidenav" class="sidenav">
 
         <div id="choices1" class="aboutchoices choices expandedbox">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -677,27 +698,23 @@
 
 
     </div> -->
-
-</div>
-</template>
-
-<script src="blockly_compressed.js"></script>
-<script src="blocks_compressed.js"></script>
-<script src="msg/js/en.js"></script>
-<script src="javascript_compressed.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-
-<script type="text/javascript" src="semantic/assets/js/semantic.min.js"></script>
-<script type="text/javascript" src="semantic/assets/js/myjs.js"></script>
-<script type="text/javascript" src="semantic/assets/js/jquery.min.js"></script>
-
-
-<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.3.1/vue-router.min.js'></script>
-<script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
-
-<script src="script.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.4.3/fabric.min.js"></script>
-<script src="blocks.js"></script>
+            </div>
+    </template>
+    <script src="blockly_compressed.js"></script>
+    <script src="blocks_compressed.js"></script>
+    <script src="msg/js/en.js"></script>
+    <script src="javascript_compressed.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <script type="text/javascript" src="semantic/assets/js/semantic.min.js"></script>
+    <script type="text/javascript" src="semantic/assets/js/myjs.js"></script>
+    <script type="text/javascript" src="semantic/assets/js/jquery.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.3.1/vue-router.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.4.3/fabric.min.js"></script>
+    <script src="blocks.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </body>
+
 </html>

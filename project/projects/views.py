@@ -59,6 +59,22 @@ def create_project(user):
 	return jsonify({"status": "success", "pid": project.id})
 
 
+@app.route('/search', methods=['POST'])
+def search():
+	post_data = request.get_json()
+	q = post_data.get("query")
+	projects = db.session.query(Project).filter(Project.name.like("%{0}%".format(q)))
+	users = db.session.query(User).filter(User.username.like("%{0}%".format(q)))
+	response = {"projects":[], "users":[]}
+
+	for user in users:
+		response["users"].append({"username": user.username})
+
+	for project in projects:
+		response["projects"].append({"name": project.name, "id": project.id})
+
+	return jsonify(response)
+
 @app.route('/fork_project', methods=['POST'])
 @authorize
 def fork_project(user):
@@ -149,6 +165,7 @@ def get_project(project_id: int) -> json:
 		info = {
 			"status": "success",
 			"name" : query_result[0].name,
+			"owner": query_result[0].owner,
 			"description" : query_result[0].description,
 			"xml": query_result[0].xml,
 			"parent": query_result[0].parent

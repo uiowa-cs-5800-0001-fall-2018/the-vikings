@@ -1,26 +1,28 @@
 ///////// AUX FUNCTIONS //////////
 
-function setCookie(name,value,days) {
+function setCookie(name, value, days) {
     var expires = "";
     if (days) {
         var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = "; expires=" + date.toUTCString();
     }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
+
 function getCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
+    for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
     }
     return null;
 }
-function eraseCookie(name) {   
-    document.cookie = name+'=; Max-Age=-99999999;';  
+
+function eraseCookie(name) {
+    document.cookie = name + '=; Max-Age=-99999999;';
 }
 
 ///////// END AUX FUNCTIONS //////////
@@ -29,17 +31,17 @@ var Home = Vue.extend({
     template: '#home',
     data: function() {
         return {
-            login: { 
-                "username":"", 
+            login: {
+                "username": "",
                 "password": ""
             },
             register: {
-                "email":"", 
+                "email": "",
                 "password": "",
                 "username": ""
             },
             msg: "",
-            status : "",
+            status: "",
             requester: ""
 
         }
@@ -56,13 +58,13 @@ var Home = Vue.extend({
                 console.log(this.requester, "qweqwe");
             })
         }
-        
+
     },
     methods: {
         logout: function() {
             eraseCookie('token_vikings');
             alert("logged out!");
-            router.go({ name: 'home'})
+            router.go({ name: 'home' })
         },
         logInUser: function() {
             var login = this.login;
@@ -82,9 +84,9 @@ var Home = Vue.extend({
                 this.status = body.status
                 if (body.status == "success") {
                     this.msg = "Successfully logged in, directing to your homepage."
-                    setCookie('token_vikings', 'Bearer '+body.auth_token, 365);
+                    setCookie('token_vikings', 'Bearer ' + body.auth_token, 365);
                     setTimeout(function() {
-                        router.push({ name: 'profile', params: { username: json.username }})
+                        router.push({ name: 'profile', params: { username: json.username } })
                     }, 3000);
                 } else if (body.status == "fail") {
                     this.msg = "Given info doesn't match with our records."
@@ -112,9 +114,9 @@ var Home = Vue.extend({
                     this.status = body.status
                     if (body.status == "success") {
                         this.msg = "Successfully registered and logged in, directing to your homepage."
-                        setCookie('token_vikings', 'Bearer '+body.auth_token, 365);
+                        setCookie('token_vikings', 'Bearer ' + body.auth_token, 365);
                         setTimeout(function() {
-                            router.push({ name: 'profile', params: { username: json.username }})
+                            router.push({ name: 'profile', params: { username: json.username } })
                         }, 3000);
                     } else if (body.status == "fail") {
                         this.msg = "There is already a user with this username or email."
@@ -126,7 +128,7 @@ var Home = Vue.extend({
             } else {
                 this.msg = "Passwords doesn't match"
             }
-            
+
         }
     }
 })
@@ -134,15 +136,16 @@ var Home = Vue.extend({
 
 var Profile = Vue.extend({
     template: '#profile',
-    data: function(){
+    data: function() {
         return {
             username: this.$route.params.username,
             token: "",
-            requester: {username: ""},
+            requester: { username: "" },
             project: {},
             msg: null,
             status: null,
-            projects: []
+            projects: [],
+            query: ""
         }
     },
     mounted: function() {
@@ -166,13 +169,46 @@ var Profile = Vue.extend({
             }
         })
 
-        
+
     },
     methods: {
         logout: function() {
             eraseCookie('token_vikings');
             alert("logged out!");
-            router.go({ name: 'home'})
+            router.go({ name: 'home' })
+        },
+        search: function() {
+            this.$http.post('/search', { "query": this.query }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                searchResults = [];
+                res = response.body;
+                console.log(res)
+                projects = res.projects
+                users = res.users
+                var links = {};
+                for (var i = 0; i < projects.length; i++) {
+                    searchResults.push(projects[i].name)
+                    links[projects[i].name] = "projects" + projects[i].id
+                }
+
+                for (var i = 0; i < users.length; i++) {
+                    searchResults.push("User: @" + users[i].username)
+                    links["User: @" + users[i].username] = "/user/" + users[i].username
+                }
+
+                console.log(searchResults)
+                $("#searchbox").autocomplete({
+                    source: searchResults,
+                    select: function(event, ui) {
+                        router.push({ path: links[ui.item.label] })
+
+                    }
+                });
+
+            });
         },
         createProject: function() {
             if (this.project.is_public) {
@@ -180,8 +216,8 @@ var Profile = Vue.extend({
             } else {
                 is_public = 0
             }
-            json = {"name": this.project.name, "description": this.project.desc, "is_public": is_public}
-            
+            json = { "name": this.project.name, "description": this.project.desc, "is_public": is_public }
+
             this.$http.post('/create_project', json, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -192,9 +228,9 @@ var Profile = Vue.extend({
                 this.status = body.status
                 if (body.status == "success") {
                     this.msg = "Created, redirecting..."
-                    
+
                     setTimeout(function() {
-                        router.push({ name: 'project', params: { project_id: body.pid }})
+                        router.push({ name: 'project', params: { project_id: body.pid } })
                     }, 3000);
                 } else {
                     this.msg = "Something unexpected happened, please try again later."
@@ -207,8 +243,8 @@ var Profile = Vue.extend({
 
 var Redirect = Vue.extend({
     mounted: function() {
-        var id = this.$route.params.id;
-        router.push({ path: `/project/${id}` })
+        console.log(this.$route.fullPath.split("/").slice(2, this.$route.fullPath.split("/").length).join("/"))
+        router.push({ path: "/" + this.$route.fullPath.split("/").slice(2, this.$route.fullPath.split("/").length).join("/") })
     }
 });
 
@@ -220,17 +256,21 @@ var Project = Vue.extend({
             content: '',
             js_code: '',
             workspace: null,
-            requester: {"username": null},
+            requester: { "username": null },
             token: null,
+            owner: "",
             is_justblockly: false,
             is_justcode: false,
-            saveas: {"name":"","desc":""}
+            saveas: { "name": "", "desc": "" },
+            query: "",
+            searchResults: [],
         }
     },
     mounted: function() {
-        var workspace = Blockly.inject(this.$refs.blocklyDiv, {toolbox: this.$refs.toolbox});
+        var workspace = Blockly.inject(this.$refs.blocklyDiv, { toolbox: this.$refs.toolbox });
         this.workspace = workspace
         workspace.addChangeListener(this.onWorkspaceChange);
+
 
 
         this.token = getCookie("token_vikings")
@@ -241,38 +281,75 @@ var Project = Vue.extend({
                 }
             }).then(response => {
                 this.requester = response.body.data;
+                console.log(this.requester.username)
             })
         }
         this.run();
     },
     methods: {
         run: function() {
-            this.$http.get('/projects/'+this.project_id, {
+            this.$http.get('/projects/' + this.project_id, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
                 res = response.body;
-                
+
                 if (res.status == 'success') {
                     this.content = res.xml
+                    this.owner = res.owner
+                    console.log(this.owner)
+
                     var xml = Blockly.Xml.textToDom(this.content);
                     Blockly.Xml.domToWorkspace(xml, this.workspace);
                     var code = Blockly.JavaScript.workspaceToCode(this.workspace);
                     this.js_code = code;
-        
                 } else {
+                    console.log("kmlqmke")
                     this.content = 'error'
                 }
             })
         },
+        search: function() {
+            this.$http.post('/search', { "query": this.query }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                this.searchResults = [];
+                res = response.body;
+                console.log(res)
+                projects = res.projects
+                users = res.users
+                var links = {};
+                for (var i = 0; i < projects.length; i++) {
+                    this.searchResults.push(projects[i].name)
+                    links[projects[i].name] = "projects" + projects[i].id
+                }
+
+                for (var i = 0; i < users.length; i++) {
+                    this.searchResults.push("User: @" + users[i].username)
+                    links["User: @" + users[i].username] = "/user/" + users[i].username
+                }
+
+                console.log(this.searchResults)
+                $("#searchbox").autocomplete({
+                    source: this.searchResults,
+                    select: function(event, ui) {
+                        router.push({ path: links[ui.item.label] })
+
+                    }
+                });
+
+            });
+        },
         saveAs: function() {
             var saveas = this.saveas;
             var json = {
-                        "desc": saveas.desc,
-                        "name": saveas.name,
-                        "id": this.project_id
-                        }
+                "desc": saveas.desc,
+                "name": saveas.name,
+                "id": this.project_id
+            }
             console.log(saveas.desc, saveas.name, this.project_id);
             this.$http.post('/saveas_project', json, {
                 headers: {
@@ -283,15 +360,15 @@ var Project = Vue.extend({
                 res = response.body;
                 if (res.status == "success") {
                     alert("saved, redirecting")
-                    router.push({ path: `/redirect/${res.pid}` })
+                    router.push({ path: `/redirect/project/${res.pid}` })
 
-                    
+
                 } else {
                     alert("failed")
                 }
 
-            }); 
-            
+            });
+
         },
         justblockly: function() {
             if (this.is_justcode) {
@@ -316,7 +393,7 @@ var Project = Vue.extend({
             Blockly.svgResize(this.workspace);
             this.is_justblockly = false;
         },
-        justcode: function(){
+        justcode: function() {
             if (this.is_justblockly) {
                 this.un_justblockly();
             }
@@ -327,7 +404,7 @@ var Project = Vue.extend({
             Blockly.svgResize(this.workspace);
             this.is_justcode = true;
         },
-        un_justcode: function(){
+        un_justcode: function() {
             if (this.is_justblockly) {
                 this.un_justblockly();
             }
@@ -340,47 +417,47 @@ var Project = Vue.extend({
         logout: function() {
             eraseCookie('token_vikings');
             alert("logged out!");
-            router.go({ name: 'home'})
+            router.go({ name: 'home' })
         },
-		run_blocks: function() {
-          document.getElementById('id04').style.display='block';
+        run_blocks: function() {
+            document.getElementById('id04').style.display = 'block';
             var code = this.js_code;
             eval(code);
             // console.log(code.split("//STEP"))
             code = code.split("//STEP")
 
         },
-		fork_it: function() {
-            json = {"id": this.project_id}
-            
+        fork_it: function() {
+            json = { "id": this.project_id }
+
             this.$http.post('/fork_project', json, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': this.token
                 }
             }).then(response => {
-				res = response.body;
-				if (res.status == "success") {
-					alert("forked, redirecting")
-                    router.push({ path: `/redirect/${res.pid}` });
-					
-				} else {
-					alert("failed")
-				}
+                res = response.body;
+                if (res.status == "success") {
+                    alert("forked, redirecting")
+                    router.push({ path: `/redirect/project/${res.pid}` });
 
-            });	
-		},
+                } else {
+                    alert("failed")
+                }
+
+            });
+        },
         onWorkspaceChange: function() {
             var code = Blockly.JavaScript.workspaceToCode(this.workspace);
             this.js_code = code;
-            
-            
+
+
         },
-        save: function(){
+        save: function() {
             console.log("jmekmwekmew")
             var xml = Blockly.Xml.workspaceToDom(this.workspace);
             var xml_text = Blockly.Xml.domToText(xml);
-            json = {"p_id": this.project_id, "content": xml_text}
+            json = { "p_id": this.project_id, "content": xml_text }
             console.log(xml_text)
             this.$http.post('/save_project', json, {
                 headers: {
@@ -419,7 +496,7 @@ const router = new VueRouter({
             name: 'profile'
         },
         {
-            path: '/redirect/:id',
+            path: '/redirect/*',
             component: Redirect,
             name: 'redirect'
         }
