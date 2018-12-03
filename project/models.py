@@ -168,3 +168,22 @@ class Stars(BaseModel, db.Model):
 
 # Stars.__table__.drop()
 
+class Comments(BaseModel, db.Model):
+    """ Comments model for storing commenting details"""
+    __tablename__="comments"
+    __table_args__= {'extend_existing': True}
+
+    c_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    project_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.Text)
+
+    def __init__(self,
+                 user_id,
+                 project_id,
+                 comment,
+                 ):
+
+        self.user_id=user_id
+        self.project_id = project_id
+        self.comment = comment
