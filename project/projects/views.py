@@ -207,7 +207,7 @@ def project_data(project_id):
 
 @app.route("/user/<owner>")
 def projects_data(owner):
-	return get_projects(owner)
+	return json.dumps({"owner": get_projects(owner), "public": get_public_projects(owner)})
 
 def get_project(project_id: int) -> json:
 	"""
@@ -227,7 +227,7 @@ def get_project(project_id: int) -> json:
 			"parents": parents(project_id),
 			"children": children(project_id)
 		}
-		return json.dumps(info)
+		return info
 
 
 	return "foo"
@@ -256,6 +256,28 @@ def get_projects(owner):
 
 	return json.dumps(respond)
 
+def get_public_projects(owner):
+	query_result = db.session.query(Project).filter(Project.is_public == True, Project.owner != owner).all()
+
+	respond = []
+	for res in query_result:
+		info = {
+			"id": res.id,
+			"name" : res.name,
+			"description" : res.description,
+			"xml": res.xml,
+			"owner": res.owner,
+			"datetime": str(res.last_modified),
+			"num_stars": res.num_stars
+		}
+		respond.append(info)
+
+	
+	respond.reverse()
+	respond = {"status":"success", "data": respond}
+
+	return respond
+
 
 def save_project_helper(p_id, content, submitter):
 	query_result = db.session.query(Project).filter(Project.id == p_id).first()
@@ -266,3 +288,4 @@ def save_project_helper(p_id, content, submitter):
 		return True
 
 	return False
+

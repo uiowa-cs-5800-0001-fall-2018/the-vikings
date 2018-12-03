@@ -113,10 +113,10 @@
                             </div>
                         </div>
                         <div class="item">
-                            <div class="header">Projects</div>
+                            <div class="header">Other Projects</div>
                             <div class="menu">
                                 <a class="item" onclick="document.getElementById('id01__').style.display='block'">New Project</a>
-                                <a class="item" href="Other_projects.html">Other Projects</a>
+                                <a class="item" onclick="document.getElementById('grad').style.display = 'block'">Other Projects</a>
                             </div>
                         </div>
                         <div class="item">
@@ -140,9 +140,41 @@
                         </center>
                         <br>
                         <h2 v-if="username==requester.username">Your Projects!</h2>
-                        <h2 vue-else>Projects</h2>
                         <div class="ui link cards">
-                            <div v-for="project_ in projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
+
+
+                            <div  v-for="project_ in owner_projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
+
+                                <div class="content">
+                                    <center>
+                                        <div class="header"><router-link :to="{ name: 'project', params: { 'project_id': project_.id }}">{{project_.name}}</router-link><a><i class="star outline icon"
+                                            style="float:right;"></i></a>
+                                        </div>
+                                        <div class="meta">
+                                            <a href="User_page.html"> Created by: {{project_.owner}}</a>
+                                        </div>
+                                    </center>
+                                    <div class="description">
+                                        {{project_.description}}
+                                    </div>
+                                </div>
+                                <div class="extra content">
+                                    <span class="right floated">
+                                        {{project_.datetime}}
+                                    </span>
+                                    <span>
+                                        {{project_.num_stars}} stars
+                                    </span>
+                                </div>
+                                <button class="ui yellow bottom attached button">
+                                    <i class="random icon"></i>
+                                    Forked Projects
+                                </button>
+                            </div> 
+                        <h2 vue-else> Other Projects</h2>
+                        <div class="ui link cards">
+
+                            <div  v-for="project_ in public_projects" class="ui card" style="box-shadow: 8px 10px 12px rgba(0,0,0,0.4);left:8px;">
                                 <div class="content">
                                     <center>
                                         <div class="header">
