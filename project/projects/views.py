@@ -1,4 +1,4 @@
-from project.models import Project, User, Stars
+from project.models import Project, User, Stars, Comments
 from project import bcrypt, db, app
 from functools import wraps
 from flask import abort, request, jsonify
@@ -294,7 +294,7 @@ def save_project_helper(p_id, content, submitter):
 
 @app.route("/projects/<project_id>")
 def data_project(project_id):
-	content = db_connections.get_project(int(project_id))
+	content = get_project(int(project_id))
 
 	return content
 
@@ -372,7 +372,20 @@ def starredprojects(owner):
 	
 	return jsonify({"status": "success", "data": respond})
 		
-	
+@app.route("/comments", methods=['POST'])
+@authorize
+def comments_data(user):
+	try:
+		post_data = request.get_json()
+		user_id = post_data.get("uid")
+		project_id = post_data.get("pid")
+		comment = post_data.get("comment")
+		comment_it(int(user_id), int(project_id), str(comment))
+
+		return jsonify({"status": "success"})
+	except Exception as e:
+		print(e)
+		return jsonify({"status": "fail"})
 
 
 def star_it(user_id: int, project_id: int):
@@ -397,4 +410,17 @@ def unstar_it(user_id: int, project_id: int):
 	query_result[0].num_stars = int(query_result[0].num_stars)-1
 	
 	db.session.query(Stars).filter(Stars.project_id==project_id, Stars.user_id==user_id).delete()
+	db.session.commit()
+
+def comment_it(user_id: int, project_id: int, comment: str):
+	"""
+	 	    :param project_id:
+	 	    :param user_id:
+	 	    :param comment:
+		    :return:
+		    """
+
+	comments_row = Comments(project_id=project_id, user_id=user_id, comment=comment)
+	db.session.add(comments_row)
+	db.session.flush()
 	db.session.commit()
