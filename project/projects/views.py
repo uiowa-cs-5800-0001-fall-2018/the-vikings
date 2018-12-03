@@ -333,8 +333,12 @@ def is_starred(user):
 		user_id = post_data.get("uid")
 		project_id = post_data.get("pid")
 		query_result = db.session.query(Stars).filter(Stars.project_id == project_id, Stars.user_id==user_id).first()
+
+		if query_result:
+			return jsonify({"status":"yes"})
+		else:
+			return jsonify({"status":"no"})
 		
-		return jsonify({"status":"yes"})
 	except:
 		return jsonify({"status":"no"})
 
