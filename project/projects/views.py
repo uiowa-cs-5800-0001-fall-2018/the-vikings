@@ -8,23 +8,19 @@ import json
 def authorize(f):
 	@wraps(f)
 	def decorated_function(*args, **kws):
-		print('qweqweqwe')
 		if not 'Authorization' in request.headers:
 			abort(401)
 
 		auth_header = request.headers.get('Authorization')
 		if auth_header:
-			print('####')
 			try:
 				auth_token = auth_header.split(" ")[1]
 			except IndexError:
 				abort(401)
 		else:
-			print('###')
 			auth_token = ''
 
 		if auth_token:
-			print("qwe",auth_token, "qwe")
 			resp = User.decode_auth_token(auth_token)
 			if not isinstance(resp, str):
 				user = User.query.filter_by(id=resp).first()
@@ -144,6 +140,44 @@ def saveas_project(user):
 		return jsonify({"status": "fail"})
 
 
+@app.route("/parents/<project_id>")
+def parents(project_id):
+	pid = int(project_id)
+	cur = db.session.query(Project).filter(Project.id == pid).first()
+
+	parents = []
+
+	if cur.parent:
+		parent = db.session.query(Project).filter(Project.id == cur.parent).first()
+		parents.append([cur.parent, parent.name])
+		loop = True
+	else:
+		loop=False
+
+	while loop:
+		cur = db.session.query(Project).filter(Project.id == cur.parent).first()
+		
+		if cur.parent:
+			parent = db.session.query(Project).filter(Project.id == cur.parent).first()
+			parents.append([cur.parent, parent.name])
+		else:
+			loop = False
+
+
+	return parents
+
+@app.route("/children/<project_id>")
+def children(project_id):
+	pid = int(project_id)
+	query_result = db.session.query(Project).filter(Project.parent == pid).all()
+
+	children = []
+	for res in query_result:
+		children.append([res.id, res.name])
+
+
+	return children
+
 @app.route("/projects/<project_id>")
 def project_data(project_id):
 	content = get_project(int(project_id))
@@ -168,7 +202,9 @@ def get_project(project_id: int) -> json:
 			"owner": query_result[0].owner,
 			"description" : query_result[0].description,
 			"xml": query_result[0].xml,
-			"parent": query_result[0].parent
+			"parent": query_result[0].parent,
+			"parents": parents(project_id),
+			"children": children(project_id)
 		}
 		return json.dumps(info)
 
@@ -177,7 +213,7 @@ def get_project(project_id: int) -> json:
 
 
 def get_projects(owner):
-	query_result = db.session.query(Project).filter(Project.owner == owner).all()
+	query_result = db.session.query(Project).filter(Project.owner == owner).order_by(Project.last_modified).all()
 
 	respond = []
 	for res in query_result:

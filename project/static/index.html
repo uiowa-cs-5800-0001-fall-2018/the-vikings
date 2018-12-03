@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="semantic/assets/css/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="semantic/assets/css/mycss1.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- <link rel="stylesheet" href="semantic/assets/css/styles/default.css"> -->
     <style type="text/css">
     #ui-id-1 {
         z-index: 1000;
@@ -404,6 +405,29 @@
                     </div>
                 </form>
             </div>
+            <div id="id05" class="modal">
+                <form class="modal-content animate" action="/action_page.php">
+                    <div class="imgcontainer">
+                        <span onclick="document.getElementById('id05').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    </div>
+                    <div class="container">
+                        <h3>Parents</h3>
+                        <ul>
+                          <li v-for="parent in parents">
+
+                            <router-link :to="{ name: 'compare', params: { 'pid1':  parent[0], 'pid2': project_id}}" class="item linkref">{{ parent[1] }}</router-link>
+                          </li>
+                        </ul>
+                        <h3>Children</h3>
+                        <ul>
+                          <li v-for="child in children">
+
+                            <router-link :to="{ name: 'compare', params: { 'pid1':  child[0], 'pid2': project_id}}" class="item linkref">{{ child[1] }}</router-link>
+                          </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
             <!--creates main body-->
             <div class="wrapper">
                 <!--top main bar-->
@@ -412,7 +436,7 @@
                         <div class="item">
                             <img src="semantic/assets/img/helmet_color_1_PUS_icon.ico">
                     </div>
-                            <router-link :to="{ name: 'profile', params: { 'username':  requester.username}}" class="item linkref"><i class="home icon"></i>Home</router-link>
+                            <router-link :to="{ name: 'home'}" class="item linkref"><i class="home icon"></i>Home</router-link>
                             <a v-if="is_justblockly==false" class="item linkref" v-on:click="justblockly()">Just Blockly</a>
                             <a v-if="is_justblockly==true" class="item linkref" v-on:click="un_justblockly()"> Double-view</a>
                             <a v-if="is_justcode==false" class="item linkref" v-on:click="justcode()">Just Code</a>
@@ -425,6 +449,8 @@
                         Project</a> -->
                             <a class="item linkref" v-on:click="run_blocks()"><i class="play icon"></i></a>
                             <a v-on:click="fork_it()" class="item linkref"><i class="random icon"></i>Fork</a>
+                            <a class="item linkref" v-if="owner==requester.username"  onclick="document.getElementById('id05').style.display='block'"><i
+                        class="pencil alternate icon"></i>Compare</a>
                             <a class="item linkref"> <i class="star outline icon"></i></a>
                             <div class="ui category search item">
                                 <div class="ui icon input">
@@ -432,50 +458,12 @@
                                     <i class="search link icon"></i>
                                 </div>
                             </div>
-                            <div class="item" style="float:right;">
+                           <router-link v-if="requester" :to="{ name: 'profile', params: { 'username':  requester.username}}" class="item linkref" style="float:right;">
                                 <div class="ui dropdown">
                                     <i class="user teal circle icon big"></i>
-                                    <div class="menu">
-                                        <div class="item">New</div>
-                                        <div class="item">
-                                            <span class="description">ctrl + o</span>
-                                            Open...
-                                        </div>
-                                        <div class="item">
-                                            <span class="description">ctrl + s</span>
-                                            Save as...
-                                        </div>
-                                        <div class="item">
-                                            <span class="description">ctrl + r</span>
-                                            Rename
-                                        </div>
-                                        <div class="item">Make a copy</div>
-                                        <div class="item">
-                                            <i class="folder icon"></i>
-                                            Move to folder
-                                        </div>
-                                        <div class="item">
-                                            <i class="trash icon"></i>
-                                            Move to trash
-                                        </div>
-                                        <div class="divider"></div>
-                                        <div class="item">Download As...</div>
-                                        <div class="item">
-                                            <i class="dropdown icon"></i>
-                                            Publish To Web
-                                            <div class="menu">
-                                                <div class="item">Google Docs</div>
-                                                <div class="item">Google Drive</div>
-                                                <div class="item">Dropbox</div>
-                                                <div class="item">Adobe Creative Cloud</div>
-                                                <div class="item">Private FTP</div>
-                                                <div class="item">Another Service...</div>
-                                            </div>
-                                        </div>
-                                        <div class="item">E-mail Collaborators</div>
-                                    </div>
+                                    
                                 </div>
-                            </div>
+                            </router-link>
                         </div>
                     </div>
                 </div>
@@ -700,6 +688,193 @@
     </div> -->
             </div>
     </template>
+    <template id="compare">
+        <div>
+            <div class="wrapper">
+                <div class="ui top fixed menu">
+                    <div class="left top fixed menu">
+                        <div class="item">
+                            <img src="semantic/assets/img/helmet_color_1_PUS_icon.ico">
+                        </div>
+                            <router-link :to="{ name: 'home'}" class="item linkref"><i class="home icon"></i>Home</router-link>
+                            <div class="ui category search item">
+                                <div class="ui icon input">
+                                    <input class="prompt" id="searchbox" v-model="query" v-on:input="search" type="text" placeholder="Search Projects...">
+                                    <i class="search link icon"></i>
+                                </div>
+                            </div>
+                            <div style="font-size: 18px;" class="item">Comparing "{{name1}}" with "{{name2}}"</div>
+                            <router-link v-if="requester" :to="{ name: 'profile', params: { 'username':  requester.username}}" class="item linkref" style="float:right;">
+                                <div class="ui dropdown">
+                                    <i class="user teal circle icon big"></i>
+                                    
+                                </div>
+                            </router-link>
+                        </div>
+                    </div>
+                </div>
+                <div class="split left left2">
+                    <div class="form infront">
+                        <div class="field"><router-link :to="{name: 'project', params: {'project_id': project_id1}}"><h1 style="color:white;">{{name1}}</h1></router-link></div>
+                        <textarea rows="42">{{code1}}</textarea>
+                    </div>
+                </div>
+                <div class="split right right2">
+                    <div class="form infront">
+                        <div class="field"><router-link :to="{name: 'project', params: {'project_id': project_id2}}"><h1 style="color:white;">{{name2}}</h1></router-link></div>
+                        <textarea rows="42">{{code2}}</textarea>
+                    </div>
+                </div>
+                <div style="display: none;">
+                <div id="blocklyDiv" ref="blocklyDiv" style="height: 100%; width:100%;"></div>
+                    <xml id="toolbox" ref="toolbox" style="display: none">
+                        <category name="Turtle">
+                            <block type="initiate_drawing"></block>
+                            <block type="move">
+                                <value name="VALUE">
+                                    <block type="math_number">
+                                        <title name="NUM">10</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="turn">
+                                <value name="VALUE">
+                                    <block type="math_number">
+                                        <title name="NUM">90</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="width">
+                                <value name="WIDTH">
+                                    <block type="math_number">
+                                        <title name="NUM">1</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="setcolor"></block>
+                        </category>
+                        <category name="Control">
+                            <block type="controls_if"></block>
+                            <block type="controls_repeat"></block>
+                            <block type="controls_whileUntil"></block>
+                            <block type="controls_for">
+                                <value name="FROM">
+                                    <block type="math_number">
+                                        <title name="NUM">1</title>
+                                    </block>
+                                </value>
+                                <value name="TO">
+                                    <block type="math_number">
+                                        <title name="NUM">10</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="controls_forEach"></block>
+                            <block type="controls_flow_statements"></block>
+                        </category>
+                        <category name="Logic">
+                            <block type="logic_compare"></block>
+                            <block type="logic_operation"></block>
+                            <block type="logic_negate"></block>
+                            <block type="logic_boolean"></block>
+                            <block type="logic_null"></block>
+                            <block type="logic_ternary"></block>
+                        </category>
+                        <category name="Math">
+                            <block type="math_number"></block>
+                            <block type="math_arithmetic"></block>
+                            <block type="math_single"></block>
+                            <block type="math_trig"></block>
+                            <block type="math_constant"></block>
+                            <block type="math_number_property"></block>
+                            <block type="math_change">
+                                <value name="DELTA">
+                                    <block type="math_number">
+                                        <title name="NUM">1</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="math_round"></block>
+                            <block type="math_on_list"></block>
+                            <block type="math_modulo"></block>
+                            <block type="math_constrain">
+                                <value name="LOW">
+                                    <block type="math_number">
+                                        <title name="NUM">1</title>
+                                    </block>
+                                </value>
+                                <value name="HIGH">
+                                    <block type="math_number">
+                                        <title name="NUM">100</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="math_random_int">
+                                <value name="FROM">
+                                    <block type="math_number">
+                                        <title name="NUM">1</title>
+                                    </block>
+                                </value>
+                                <value name="TO">
+                                    <block type="math_number">
+                                        <title name="NUM">100</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="math_random_float"></block>
+                        </category>
+                        <category name="Lists">
+                            <block type="lists_create_empty"></block>
+                            <block type="lists_create_with"></block>
+                            <block type="lists_repeat">
+                                <value name="NUM">
+                                    <block type="math_number">
+                                        <title name="NUM">5</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="lists_length"></block>
+                            <block type="lists_isEmpty"></block>
+                            <block type="lists_indexOf">
+                                <value name="VALUE">
+                                    <block type="variables_get">
+                                        <title name="VAR">list</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="lists_getIndex">
+                                <value name="VALUE">
+                                    <block type="variables_get">
+                                        <title name="VAR">list</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="lists_setIndex">
+                                <value name="LIST">
+                                    <block type="variables_get">
+                                        <title name="VAR">list</title>
+                                    </block>
+                                </value>
+                            </block>
+                            <block type="lists_getSublist">
+                                <value name="LIST">
+                                    <block type="variables_get">
+                                        <title name="VAR">list</title>
+                                    </block>
+                                </value>
+                            </block>
+                        </category>
+                        <category name="Variables" custom="VARIABLE">
+                        </category>
+                        <category name="Procedures" custom="PROCEDURE">
+                        </category>
+                    </xml>
+                
+            </div>
+            </div>
+
+    </template>
+    <!-- <script src="semantic/assets/js/highlight.pack.js"></script> -->
     <script src="blockly_compressed.js"></script>
     <script src="blocks_compressed.js"></script>
     <script src="msg/js/en.js"></script>
@@ -715,6 +890,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.4.3/fabric.min.js"></script>
     <script src="blocks.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
 </body>
 
 </html>

@@ -264,6 +264,8 @@ var Project = Vue.extend({
             saveas: { "name": "", "desc": "" },
             query: "",
             searchResults: [],
+            parents: [],
+            children: [],
         }
     },
     mounted: function() {
@@ -296,9 +298,10 @@ var Project = Vue.extend({
                 res = response.body;
 
                 if (res.status == 'success') {
+                    this.parents = res.parents
+                    this.children = res.children
                     this.content = res.xml
                     this.owner = res.owner
-                    console.log(this.owner)
 
                     var xml = Blockly.Xml.textToDom(this.content);
                     Blockly.Xml.domToWorkspace(xml, this.workspace);
@@ -479,6 +482,117 @@ var Project = Vue.extend({
 })
 
 
+var Compare = Vue.extend({
+    template: '#compare',
+    data: function() {
+        return {
+            project_id1: this.$route.params.pid1,
+            project_id2: this.$route.params.pid2,
+            query: "",
+            requester: null,
+            name1: "",
+            name2: "",
+            code1: "",
+            code2: "",
+        }
+    },
+    mounted: function() {
+        this.token = getCookie("token_vikings")
+        if (this.token) {
+            this.$http.get('/auth/status', {
+                headers: {
+                    'Authorization': this.token
+                }
+            }).then(response => {
+                this.requester = response.body.data;
+            })
+        }
+
+        console.log(this.$refs.blocklyDiv)
+        
+        //get first project's code
+        this.$http.get('/projects/' + this.project_id1, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            res = response.body;
+
+            if (res.status == 'success') {
+                var workspace1 = Blockly.inject(this.$refs.blocklyDiv, { toolbox: this.$refs.toolbox });
+                var xml = Blockly.Xml.textToDom(res.xml);
+                Blockly.Xml.domToWorkspace(xml, workspace1);
+                var code = Blockly.JavaScript.workspaceToCode(workspace1);
+                this.code1 = code;
+                this.name1 = res.name;
+            } else {
+                this.content = 'error'
+            }
+        })
+
+        this.$http.get('/projects/' + this.project_id2, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            res = response.body;
+
+            if (res.status == 'success') {
+                var workspace2 = Blockly.inject(this.$refs.blocklyDiv, { toolbox: this.$refs.toolbox });
+                var xml = Blockly.Xml.textToDom(res.xml);
+                Blockly.Xml.domToWorkspace(xml, workspace2);
+                var code = Blockly.JavaScript.workspaceToCode(workspace2);
+                this.code2 = code;
+                this.name2 = res.name;
+            } else {
+                this.content = 'error'
+            }
+        })
+
+        console.log(this.project_id1)
+        console.log(this.project_id2)
+    },
+    methods: {
+        search: function() {
+            this.$http.post('/search', { "query": this.query }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                searchResults = [];
+                res = response.body;
+                console.log(res)
+                projects = res.projects
+                users = res.users
+                var links = {};
+                for (var i = 0; i < projects.length; i++) {
+                    searchResults.push(projects[i].name)
+                    links[projects[i].name] = "projects" + projects[i].id
+                }
+
+                for (var i = 0; i < users.length; i++) {
+                    searchResults.push("User: @" + users[i].username)
+                    links["User: @" + users[i].username] = "/user/" + users[i].username
+                }
+
+                $("#searchbox").autocomplete({
+                    source: searchResults,
+                    select: function(event, ui) {
+                        router.push({ path: links[ui.item.label] })
+
+                    }
+                });
+
+            });
+        },
+        logout: function() {
+            eraseCookie('token_vikings');
+            alert("logged out!");
+            router.go({ name: 'home' })
+        },
+    }
+})
+
 const router = new VueRouter({
     routes: [{
             path: '/',
@@ -499,6 +613,11 @@ const router = new VueRouter({
             path: '/redirect/*',
             component: Redirect,
             name: 'redirect'
+        },
+        {
+            path: '/compare/:pid1/:pid2',
+            component: Compare,
+            name: 'compare'
         }
     ]
 });
