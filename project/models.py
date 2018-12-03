@@ -1,6 +1,6 @@
 import datetime
 import jwt
-from .import bcrypt, db, app
+from project import bcrypt, db, app
 
 
 class BaseModel(db.Model):
@@ -152,9 +152,9 @@ class Project(BaseModel, db.Model):
 class Stars(BaseModel, db.Model):
     """ Stars model for storing starring details"""
     __tablename__="stars"
-    #__table_args__= {'extend_existing': True}
+    __table_args__= {'extend_existing': True}
 
-    s_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     project_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, nullable=False)
 
@@ -166,5 +166,5 @@ class Stars(BaseModel, db.Model):
         self.user_id=user_id
         self.project_id = project_id
 
-
+# Stars.__table__.drop()
 
