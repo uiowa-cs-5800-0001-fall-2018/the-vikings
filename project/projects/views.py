@@ -387,6 +387,24 @@ def comments_data(user):
 		print(e)
 		return jsonify({"status": "fail"})
 
+@app.route("/commentsof", methods=['POST'])
+def get_comments():
+	post_data = request.get_json()
+	project_id = post_data.get("pid")
+	query_result = db.session.query(Comments).filter(Comments.project_id == project_id).all()
+
+	respond = []
+	for res in query_result:
+		q = db.session.query(User).filter(User.id == res.user_id).first()
+		info = {
+			"id": res.c_id,
+			"comment": res.comment,
+			"user": q.username
+		}
+		respond.append(info)
+
+	return jsonify(respond)
+
 
 def star_it(user_id: int, project_id: int):
 	"""
