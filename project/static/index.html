@@ -110,29 +110,30 @@
                             <div class="header">Home</div>
                             <div class="menu">
                                 <router-link class="item" :to="{ name: 'profile', params: { 'username':  username}}">My Page</router-link>
+                                <a class="item" onclick="document.getElementById('id01__').style.display='block'">New Project</a>
                             </div>
                         </div>
-                        <div class="item">
+                        <!-- <div class="item">
                             <div class="header">Other Projects</div>
                             <div class="menu">
                                 <a class="item" onclick="document.getElementById('id01__').style.display='block'">New Project</a>
                                 <a class="item" onclick="document.getElementById('grad').style.display = 'block'">Other Projects</a>
                             </div>
-                        </div>
-                        <div class="item">
+                        </div> -->
+                       <!--  <div class="item">
                             <div class="header">Find Friends</div>
                             <div class="menu">
                                 <a class="item" href="search_friends.html">Search Friends</a>
                             </div>
-                        </div>
-                        <div class="item">
+                        </div> -->
+                        <!-- <div class="item">
                             <div class="header">Support</div>
                             <div class="menu">
                                 <a class="item" href="main_page.html">Tutorial</a>
                                 <a class="item" id="openemailsupport"  onclick="document.getElementById('id01').style.display='block'">E-mail Support</a>
                                 <a class="item" href="FAQ_page.html">FAQs</a>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="centered-information">
                         <center>
@@ -155,7 +156,6 @@
                                         <div class="meta">
                                             <a href="User_page.html"> Created by: {{project_.owner}}</a>
                                         </div>
-                                        <a v-if="project_.owner==requester.username" v-on:click="removeProject(project_.id, project_.name)">Remove</a>
                                     </center>
                                     <div class="description">
                                         {{project_.description}}
@@ -169,9 +169,9 @@
                                         {{project_.num_stars}} stars
                                     </span>
                                 </div>
-                                <button class="ui yellow bottom attached button">
-                                    <i class="random icon"></i>
-                                    Forked Projects
+                                <button  v-if="project_.owner==requester.username" v-on:click="removeProject(project_.id, project_.name)" class="ui yellow bottom attached button">
+                                    <i class="trash icon"></i>
+                                    Remove
                                 </button>
                             </div> 
                         </div>
@@ -190,7 +190,6 @@
                                         <div class="meta">
                                             <a href="User_page.html"> Created by: {{project_.owner}}</a>
                                         </div>
-                                        <a v-if="project_.owner==requester.username" v-on:click="removeProject(project_.id, project_.name)">Remove</a>
                                     </center>
                                     <div class="description">
                                         {{project_.description}}
@@ -204,9 +203,9 @@
                                         {{project_.num_stars}} stars
                                     </span>
                                 </div>
-                                <button class="ui yellow bottom attached button">
-                                    <i class="random icon"></i>
-                                    Forked Projects
+                                <button  v-if="project_.owner==requester.username" v-on:click="removeProject(project_.id, project_.name)" class="ui yellow bottom attached button">
+                                    <i class="trash icon"></i>
+                                    Remove
                                 </button>
                             </div>
                         </div>
@@ -238,10 +237,6 @@
                                         {{project_.num_stars}} stars
                                     </span>
                                 </div>
-                                <button class="ui yellow bottom attached button">
-                                    <i class="random icon"></i>
-                                    Forked Projects
-                                </button>
                             </div>
                         </div>
                         <br>
@@ -364,13 +359,12 @@
                     </a>
                                 </div>
                                 <div class="right item">
-                                    <div class="ui search">
-                                        <div class="ui icon input">
-                                            <input class="prompt" type="text" placeholder="Search Projects...">
-                                            <i class="search link icon"></i>
-                                        </div>
-                                        <div class="results"></div>
-                                    </div>
+                                    <div class="ui category search item">
+                                <div class="ui icon input">
+                                    <input class="prompt" id="searchbox" v-model="query" v-on:input="search" type="text" placeholder="Search Projects...">
+                                    <i class="search link icon"></i>
+                                </div>
+                            </div>
                                     <router-link :to="{ name: 'project', params: { project_id: 1 }}"><a class="item">
                         Tutorial
                     </a></router-link>

@@ -42,7 +42,8 @@ var Home = Vue.extend({
             },
             msg: "",
             status: "",
-            requester: ""
+            requester: "",
+            query: ""
 
         }
     },
@@ -65,6 +66,39 @@ var Home = Vue.extend({
             eraseCookie('token_vikings');
             alert("logged out!");
             router.go({ name: 'home' })
+        },
+        search: function() {
+            this.$http.post('/search', { "query": this.query }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                searchResults = [];
+                res = response.body;
+                console.log(res)
+                projects = res.projects
+                users = res.users
+                var links = {};
+                for (var i = 0; i < projects.length; i++) {
+                    searchResults.push(projects[i].name)
+                    links[projects[i].name] = "/project/" + projects[i].id
+                }
+
+                for (var i = 0; i < users.length; i++) {
+                    searchResults.push("User: @" + users[i].username)
+                    links["User: @" + users[i].username] = "/user/" + users[i].username
+                }
+
+                console.log(searchResults)
+                $("#searchbox").autocomplete({
+                    source: searchResults,
+                    select: function(event, ui) {
+                        router.push({ path: "/redirect" + links[ui.item.label] })
+
+                    }
+                });
+
+            });
         },
         logInUser: function() {
             var login = this.login;
@@ -246,7 +280,7 @@ var Profile = Vue.extend({
                 var links = {};
                 for (var i = 0; i < projects.length; i++) {
                     searchResults.push(projects[i].name)
-                    links[projects[i].name] = "projects" + projects[i].id
+                    links[projects[i].name] = "/project/" + projects[i].id
                 }
 
                 for (var i = 0; i < users.length; i++) {
@@ -258,7 +292,7 @@ var Profile = Vue.extend({
                 $("#searchbox").autocomplete({
                     source: searchResults,
                     select: function(event, ui) {
-                        router.push({ path: links[ui.item.label] })
+                        router.push({ path: "/redirect" + links[ui.item.label] })
 
                     }
                 });
@@ -359,6 +393,8 @@ var Project = Vue.extend({
                 this.run();
 
             })
+        } else {
+            this.run();
         }
 
         //check if starred
@@ -437,7 +473,7 @@ var Project = Vue.extend({
                 var links = {};
                 for (var i = 0; i < projects.length; i++) {
                     this.searchResults.push(projects[i].name)
-                    links[projects[i].name] = "projects" + projects[i].id
+                    links[projects[i].name] = "/project/" + projects[i].id
                 }
 
                 for (var i = 0; i < users.length; i++) {
@@ -679,7 +715,7 @@ var Compare = Vue.extend({
                 var links = {};
                 for (var i = 0; i < projects.length; i++) {
                     searchResults.push(projects[i].name)
-                    links[projects[i].name] = "projects" + projects[i].id
+                    links[projects[i].name] = "/project/" + projects[i].id
                 }
 
                 for (var i = 0; i < users.length; i++) {
