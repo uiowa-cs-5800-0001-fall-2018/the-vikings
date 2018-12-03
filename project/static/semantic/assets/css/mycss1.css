@@ -42,6 +42,31 @@ overflow: auto;
     left:0px;
     background-color:white;/*rgb(189, 189, 189)*/
 }
+
+.split.left.left2{
+    right:0px;
+    background-color:black;
+}
+.split.left.left2 textarea{
+    background-color:black;
+    color: white;
+    padding-top:0px;
+    border:none;
+    width:100%;
+    height:100%;
+}
+.split.right.right2 {
+    left:0px;
+    background-color:black;
+}
+.split.right.right2 textarea{
+    background-color:black;
+    color: white;
+    padding-top:0px;
+    border:none;
+    width:100%;
+    height:100%;
+}
 .codebg textarea{
     background-color:black;
     color: white;
