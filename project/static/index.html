@@ -435,14 +435,23 @@
             </div>
             <!-- The Comment Modal -->
             <div id="id02" class="modal">
-                <form class="modal-content animate" action="/action_page.php">
+                <form class="modal-content animate" v-on:submit.prevent="post_comment">
                     <div class="imgcontainer">
                         <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
                     </div>
                     <div class="container">
-                        <label for="commentonfile"><b>Write a Comment</b></label>
-                        <textarea rows=30 style="width:100%"></textarea>
-                        <button type="save">Save</button>
+                        <!-- comments -->
+                        <li v-for="c in comments">
+                            {{c.comment}}
+                            <br> by <b> {{c.user}} </b>
+
+                        </li>
+                        <br>
+                        <div v-if="requester.username">
+                            <label for="commentonfile"><b>Write a Comment</b></label><br>
+                            <textarea v-model="comment_to_post" rows=5 style="width:60%"></textarea><br>
+                            <button type="submit">Save</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -515,18 +524,18 @@
                             <!-- <a class="item linkref" onclick="document.getElementById('id03').style.display='block'"><i class="file alternate icon"></i>New
                         Project</a> -->
                             <a class="item linkref" v-on:click="run_blocks()"><i class="play icon"></i></a>
-                            <a v-on:click="fork_it()" class="item linkref"><i class="random icon"></i>Fork</a>
+                            <a v-if="requester.username" v-on:click="fork_it()" class="item linkref"><i class="random icon"></i>Fork</a>
                             <a class="item linkref" v-if="owner==requester.username"  onclick="document.getElementById('id05').style.display='block'"><i
                         class="pencil alternate icon"></i>Compare</a>
-                            <a style="color:#F9A602;" v-if="requester && starred" class="item linkref" v-on:click="unstarthis()"> <i class="star icon"></i></a>
-                            <a v-if="requester && !starred" class="item linkref" v-on:click="starthis()"> <i class="star outline icon"></i></a>
+                            <a style="color:#F9A602;" v-if="requester.username && starred" class="item linkref" v-on:click="unstarthis()"> <i class="star icon"></i></a>
+                            <a v-if="requester.username && !starred" class="item linkref" v-on:click="starthis()"> <i class="star outline icon"></i></a>
                             <div class="ui category search item">
                                 <div class="ui icon input">
                                     <input class="prompt" id="searchbox" v-model="query" v-on:input="search" type="text" placeholder="Search Projects...">
                                     <i class="search link icon"></i>
                                 </div>
                             </div>
-                           <router-link v-if="requester" :to="{ name: 'profile', params: { 'username':  requester.username}}" class="item linkref" style="float:right;">
+                           <router-link  v-if="requester.username" :to="{ name: 'profile', params: { 'username':  requester.username}}" class="item linkref" style="float:right;">
                                 <div class="ui dropdown">
                                     <i class="user teal circle icon big"></i>
                                     

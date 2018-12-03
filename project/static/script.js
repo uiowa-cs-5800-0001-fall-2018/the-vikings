@@ -356,6 +356,8 @@ var Project = Vue.extend({
             parents: [],
             children: [],
             starred: false,
+            comments: [],
+            comment_to_post: "",
         }
     },
     mounted: function() {
@@ -397,7 +399,6 @@ var Project = Vue.extend({
             this.run();
         }
 
-        //check if starred
 
     },
     methods: {
@@ -420,10 +421,20 @@ var Project = Vue.extend({
                     var code = Blockly.JavaScript.workspaceToCode(this.workspace);
                     this.js_code = code;
                 } else {
-                    console.log("kmlqmke")
                     this.content = 'error'
                 }
             })
+
+            this.$http.post('/commentsof', {"pid":this.project_id}, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                res = response.body;
+                this.comments = res;
+                // console.log(res)
+            })
+
         },
         starthis: function() {
             json = {"uid": this.requester.user_id, "pid": this.project_id}
@@ -440,6 +451,26 @@ var Project = Vue.extend({
                     console.log("starred")
                 }
             });
+        },
+        post_comment: function() {
+            // console.log(this.comment_to_post)
+            this.$http.post('/comments', {"comment": this.comment_to_post, "pid":this.project_id, "uid": this.requester.user_id}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': this.token
+                }
+            }).then(response => {
+                res = response.body;
+                this.$http.post('/commentsof', {"pid":this.project_id}, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                res = response.body;
+                this.comments = res;
+                // console.log(res)
+            })
+            })
         },
         unstarthis: function() {
             json = {"uid": this.requester.user_id, "pid": this.project_id}
