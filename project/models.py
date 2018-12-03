@@ -1,6 +1,6 @@
 import datetime
 import jwt
-from project import bcrypt, db, app
+from .import bcrypt, db, app
 
 
 class BaseModel(db.Model):
@@ -125,10 +125,11 @@ class Project(BaseModel, db.Model):
     owner = db.Column(db.String(), nullable=False)
     xml = db.Column(db.String())
     name = db.Column(db.String(256), nullable=False)
-    description =db.Column(db.String())
+    description = db.Column(db.String())
     is_public = db.Column(db.Boolean, default=False)
     last_modified = db.Column(db.DateTime, nullable=False)
     num_stars = db.Column(db.Integer, default=False)
+    parent = db.Column(db.Integer)
 
     def __init__(self,
                  owner,
@@ -136,6 +137,7 @@ class Project(BaseModel, db.Model):
                  is_public,
                  description="",
                  xml="",
+                 parent=None
                  ):
         self.owner = owner
         self.description = description
@@ -144,3 +146,25 @@ class Project(BaseModel, db.Model):
         self.name = name
         self.last_modified = datetime.datetime.now()
         self.num_stars = 0
+        self.parent = parent
+
+
+class Stars(BaseModel, db.Model):
+    """ Stars model for storing starring details"""
+    __tablename__="stars"
+    #__table_args__= {'extend_existing': True}
+
+    s_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    project_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
+
+    def __init__(self,
+                 user_id,
+                 project_id,
+                 ):
+
+        self.user_id=user_id
+        self.project_id = project_id
+
+
+
