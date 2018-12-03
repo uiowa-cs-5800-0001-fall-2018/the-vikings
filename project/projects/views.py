@@ -115,6 +115,27 @@ def save_project(user):
 
 	return jsonify({"status": "fail"})
 
+@app.route('/remove_project', methods=['POST'])
+@authorize
+def remove_project(user):
+	post_data = request.get_json()
+	p_id = post_data.get('p_id')
+
+	query_result = db.session.query(Project).filter(Project.id == p_id).first()
+	if query_result.owner == user['username']:
+		db.session.query(Project).filter(Project.id == p_id).delete()
+		db.session.commit() 
+
+		res = True
+
+	else:
+		res = False
+
+	if res:
+		return jsonify({"status":"success"})
+
+	return jsonify({"status": "fail"})
+
 @app.route('/saveas_project', methods=['POST'])
 @authorize
 def saveas_project(user):
